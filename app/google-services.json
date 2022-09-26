@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "567419564340",
+    "project_id": "birch-finanancial-literacy-app",
+    "storage_bucket": "birch-finanancial-literacy-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:567419564340:android:b77660db11ab34ad653561",
+        "android_client_info": {
+          "package_name": "com.example.birch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "567419564340-13ei3u97cseu8d6tdg0bhm46ci3bqg3a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.birch",
+            "certificate_hash": "182c21bfb585c51078688ac39339e2f1e1ef2964"
+          }
+        },
+        {
+          "client_id": "567419564340-gek2lcaracbri645gt3fhe70mjchnfab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCooj0NSFnqlTHEOxLu8qZrjd01kvq8YeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "567419564340-gek2lcaracbri645gt3fhe70mjchnfab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

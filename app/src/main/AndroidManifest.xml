@@ -26,10 +26,10 @@
         <!-- Register and Login ! -->
         <activity
             android:name=".RegisterActivity"
-            android:exported="false" />
+            android:exported="true"/>
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="true"/>
 
         <!-- Main Activity ! -->
         <activity

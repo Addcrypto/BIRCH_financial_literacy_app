@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/your_financials">
+
+    <fragment
+        android:id="@+id/your_financials"
+        android:name="com.example.birch.ui.YourFinancialsFragment"
+        android:label="fragment_your_financials"
+        tools:layout="@layout/fragment_your_financials" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.birch.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.birch.ui.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/recommendationsFragment"
+        android:name="com.example.birch.ui.RecommendationsFragment"
+        android:label="fragment_recommendations"
+        tools:layout="@layout/fragment_recommendations" />
+</navigation>

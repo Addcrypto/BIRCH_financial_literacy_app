@@ -30,6 +30,21 @@ public class RegisterActivity extends AppCompatActivity {
     private Button mBtRegister;                 // Input from Register Button
     private CheckBox mCheckTerm, mCheckPriv;
 
+    // Function to encode the email since Realtime DB doesn't support periods.
+    static String encodeEmail(String user) {
+        return user.replace(".",",");
+    }
+
+    // Function to decode the email.
+    static String decodeEmail(String user) {
+        return user.replace(",", ".");
+    }
+
+    // Function to check if an email is of valid type.
+    boolean validEmail(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Registration process (app >> database)
 
-                String ipt_Email = mEtEmail.getText().toString();
+                String ipt_Email = encodeEmail(mEtEmail.getText().toString());
                 String ipt_Pwd = mEtPassword.getText().toString();
                 String ipt_PwdConf = mEtPasswordConf.getText().toString();
 
@@ -63,6 +78,11 @@ public class RegisterActivity extends AppCompatActivity {
                 // Checks if fields are empty
                 if(ipt_Email.isEmpty() || ipt_Pwd.isEmpty() || ipt_PwdConf.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
+                }
+
+                // Checks if email is valid format
+                if(!validEmail(decodeEmail(ipt_Email))) {
+                    Toast.makeText(RegisterActivity.this, "Please enter valid email.", Toast.LENGTH_SHORT).show();
                 }
 
                 // Checks if passwords are matching
@@ -87,18 +107,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // If all checks are passed besides email check, database is accessed here
                 else {
+                    // References the Realtime DB. addListenerSingleValueEvent is used to check if child (email) already exists and if it doesn't then it registers the user.
                     mDatabaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            // Check if user with the email already exists
+                            // Check if user is registered.
                             if(snapshot.hasChild(ipt_Email)) {
-                                Toast.makeText(RegisterActivity.this, "This email has been registered to an existing user.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "User already exists! Redirecting to login page.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
                             }
-
-                            // All checks are passed. Officially register the user by sending the data to RealTime Database
+                            // Registers the user and then moves to login page.
                             else {
                                 mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
-
                                 Toast.makeText(RegisterActivity.this, "User registered successfully.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
@@ -110,6 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         }
                     });
+
                 }
             }
         });

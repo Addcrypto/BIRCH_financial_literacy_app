@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.209" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.209" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_intro_screen.xml" value="0.33" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_regiester.xml" value="0.2921875" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.387" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_13" project-jdk-name="13" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

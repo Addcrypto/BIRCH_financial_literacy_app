@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:id="@+id/ic_birch"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            app:srcCompat="@mipmap/ic_launcher_foreground"
+            tools:ignore="MissingConstraints"
+            tools:layout_conversion_absoluteHeight="180dp"
+            tools:layout_conversion_absoluteWidth="180dp"
+            tools:layout_editor_absoluteX="115dp"
+            tools:layout_editor_absoluteY="246dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="BIRCH"
+            android:textColor="@color/blue_gray"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints"
+            tools:layout_conversion_absoluteHeight="38dp"
+            tools:layout_editor_absoluteY="427dp"
+            tools:layout_editor_absoluteX="165dp"
+            tools:layout_conversion_absoluteWidth="82dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Financial Manager in Your Hand"
+            android:textColor="@color/blue_gray"
+            android:textSize="15sp"
+            tools:ignore="MissingConstraints"
+            tools:layout_conversion_absoluteHeight="20dp"
+            tools:layout_editor_absoluteY="465dp"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_conversion_absoluteWidth="210dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

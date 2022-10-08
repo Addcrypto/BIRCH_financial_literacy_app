@@ -16,10 +16,10 @@
         android:icon="@drawable/ic_baseline_payments_24"
         android:title="Transactions" />
 
-    <item
-        android:id="@+id/recommendationsFragment"
-        android:icon="@drawable/ic_baseline_campaign_24"
-        android:title="Recommendations" />
+<!--    <item-->
+<!--        android:id="@+id/recommendationsFragment"-->
+<!--        android:icon="@drawable/ic_baseline_campaign_24"-->
+<!--        android:title="Recommendations" />-->
 
 <!--    <item-->
 <!--        android:id="@+id/futureTransactionsFragment"-->

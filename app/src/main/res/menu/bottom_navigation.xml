@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home_selector"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/yourFinancialsFragment"
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        android:title="Finances" />
+
+
+    <item
+        android:id="@+id/transactionsFragment"
+        android:icon="@drawable/ic_baseline_payments_24"
+        android:title="Transactions" />
+
+<!--    <item-->
+<!--        android:id="@+id/recommendationsFragment"-->
+<!--        android:icon="@drawable/ic_baseline_campaign_24"-->
+<!--        android:title="Recommendations" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/futureTransactionsFragment"-->
+<!--        android:icon="@drawable/ic_baseline_settings_24"-->
+<!--        android:title="Upcoming" />-->
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings" />
+
+
+</menu>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,12 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hbb20.CountryCodePicker;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;         // Firebase Authentication
     private DatabaseReference mDatabaseRef;     // Real time Firebase Connection
-    private EditText mEtEmail, mEtPassword,mEtPasswordConf;     // Input for email and password
+    private EditText mEtEmail, mEtPassword,mEtPasswordConf,mPhoneNum;     // Input for email and password
+    private CountryCodePicker mCCP;
     private Button mBtRegister;                 // Input from Register Button
     private CheckBox mCheckTerm, mCheckPriv;
 
@@ -59,6 +62,8 @@ public class RegisterActivity extends AppCompatActivity {
         mBtRegister = findViewById(R.id.bt_create);
         mCheckTerm = findViewById(R.id.check_terms);
         mCheckPriv = findViewById(R.id.check_privacy);
+        mPhoneNum = findViewById(R.id.et_phone);
+        mCCP = findViewById(R.id.countryCode);
 
         mBtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String ipt_Email = encodeEmail(mEtEmail.getText().toString());
                 String ipt_Pwd = mEtPassword.getText().toString();
                 String ipt_PwdConf = mEtPasswordConf.getText().toString();
+                String ipt_Phone = mPhoneNum.getText().toString();
+                String ipt_CompletePhoneNum = "+" + mCCP.getFullNumber() + ipt_Phone;
 
                 // ALL CHECKS HERE
                 /**

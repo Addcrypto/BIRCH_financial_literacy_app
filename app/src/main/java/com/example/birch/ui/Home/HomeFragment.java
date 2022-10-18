@@ -1,17 +1,19 @@
-package com.example.birch.ui;
+package com.example.birch.ui.Home;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.birch.R;
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.LineChart;
+import com.example.birch.models.BankInfoModel;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -39,6 +41,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     PieChart pieChart;
+    ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,6 +72,8 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        // always set up models before passing to recycler view
+        setUpBankInfoModels();
     }
 
     private void setupPieChart() {
@@ -98,6 +103,7 @@ public class HomeFragment extends Fragment {
         entries.add(new PieEntry(.3f, "Housing"));
 
 
+        // TODO: update colors to fit app design
         ArrayList<Integer> colors = new ArrayList<>();
         for (int color: ColorTemplate.MATERIAL_COLORS) {
             colors.add(color);
@@ -122,15 +128,36 @@ public class HomeFragment extends Fragment {
         // pieChart.animateY(1400, Easing.EaseInOutQuad);
     }
 
+    public void setUpBankInfoModels() {
+        // TODO: get this info from API
+        String[] bankNames = {"Chase (Checking)", "Chase (Savings)", "Discover (Credit Card)"};
+        String[] accountType = {"Checking", "Savings", "Credit"};
+        String[] accountTotals = {"$3,343.88", "$1,182.89", "$832.32"};
+
+        for(int i = 0; i < bankNames.length; i++) {
+            bankInfoModels.add(new BankInfoModel(bankNames[i], accountTotals[i], accountType[i]));
+        }
+
+
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        pieChart = (PieChart) view.findViewById(R.id.chart);
+        Context ctx = getActivity().getApplicationContext();
 
+        pieChart = (PieChart) view.findViewById(R.id.chart);
         setupPieChart();
         loadChartData();
+
+        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
+        rv_yourFinancials.setHasFixedSize(true);
+        BankInfo_RecyclerViewAdapter adapter = new BankInfo_RecyclerViewAdapter(ctx, bankInfoModels);
+        rv_yourFinancials.setAdapter(adapter);
+        rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
 
         return view;
     }

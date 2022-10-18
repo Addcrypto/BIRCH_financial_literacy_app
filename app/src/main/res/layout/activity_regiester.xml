@@ -33,12 +33,13 @@
         <!-- Terms and Conditions !-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp">
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/et_terms"
@@ -76,28 +77,24 @@
                 android:id="@+id/check_terms"
                 android:layout_width="41dp"
                 android:layout_height="42dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/content_terms" />
 
             <TextView
                 android:id="@+id/agree_terms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="28dp"
-                android:layout_marginBottom="8dp"
                 android:text="I have read and agree to the terms and conditions."
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/checkBox"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_terms"
                 app:layout_constraintTop_toBottomOf="@+id/content_terms" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Privacy Policy !-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
             app:layout_constraintEnd_toEndOf="parent"
@@ -139,14 +136,9 @@
                 android:id="@+id/agree_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="8dp"
                 android:text="I have read and agree to the privacy policy"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/checkBox"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/check_privacy"
                 app:layout_constraintTop_toBottomOf="@+id/content_privacy"
                 tools:ignore="UnknownId" />
 
@@ -154,7 +146,8 @@
                 android:id="@+id/check_privacy"
                 android:layout_width="41dp"
                 android:layout_height="42dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/content_privacy" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

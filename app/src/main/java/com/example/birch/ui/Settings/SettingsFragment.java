@@ -1,4 +1,4 @@
-package com.example.birch.ui;
+package com.example.birch.ui.Settings;
 
 import android.os.Bundle;
 

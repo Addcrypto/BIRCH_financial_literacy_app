@@ -76,4 +76,6 @@ dependencies {
     // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
+    // For the piechart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

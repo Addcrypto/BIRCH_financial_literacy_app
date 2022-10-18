@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RecommendationsFragment">
+    tools:context=".ui.Recommendations.RecommendationsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

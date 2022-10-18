@@ -7,32 +7,32 @@
 
     <fragment
         android:id="@+id/yourFinancialsFragment"
-        android:name="com.example.birch.ui.YourFinancialsFragment"
+        android:name="com.example.birch.ui.YourFinancials.YourFinancialsFragment"
         android:label="fragment_your_financials"
         tools:layout="@layout/fragment_your_financials" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.birch.ui.SettingsFragment"
+        android:name="com.example.birch.ui.Settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/recommendationsFragment"
-        android:name="com.example.birch.ui.RecommendationsFragment"
+        android:name="com.example.birch.ui.Recommendations.RecommendationsFragment"
         android:label="fragment_recommendations"
         tools:layout="@layout/fragment_recommendations" />
     <fragment
         android:id="@+id/futureTransactionsFragment"
-        android:name="com.example.birch.ui.FutureTransactionsFragment"
+        android:name="com.example.birch.ui.YourSpendings.FutureTransactionsFragment"
         android:label="fragment_future_transactions"
         tools:layout="@layout/fragment_future_transactions" />
     <fragment
         android:id="@+id/transactionsFragment"
-        android:name="com.example.birch.ui.TransactionsFragment"
+        android:name="com.example.birch.ui.YourSpendings.TransactionsFragment"
         android:label="fragment_transactions"
         tools:layout="@layout/fragment_transactions" />
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.birch.ui.HomeFragment"
+        android:name="com.example.birch.ui.Home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
 </navigation>

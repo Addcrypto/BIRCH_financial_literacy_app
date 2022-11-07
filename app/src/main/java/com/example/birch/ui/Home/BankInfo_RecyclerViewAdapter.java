@@ -29,7 +29,7 @@ public class BankInfo_RecyclerViewAdapter extends RecyclerView.Adapter<BankInfo_
     @Override
     public BankInfo_RecyclerViewAdapter.BankInfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.home_your_financials_row, parent, false);
+        View view = inflater.inflate(R.layout.list_item_home_your_financials, parent, false);
 
         return new BankInfo_RecyclerViewAdapter.BankInfoViewHolder(view);
     }

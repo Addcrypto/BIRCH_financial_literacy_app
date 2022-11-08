@@ -22,9 +22,9 @@
         tools:layout="@layout/fragment_recommendations" />
     <fragment
         android:id="@+id/futureTransactionsFragment"
-        android:name="com.example.birch.ui.YourSpendings.FutureTransactionsFragment"
+        android:name="com.example.birch.ui.YourSpendings.UpcomingTransactionsFragment"
         android:label="fragment_future_transactions"
-        tools:layout="@layout/fragment_future_transactions" />
+        tools:layout="@layout/fragment_upcoming_transactions" />
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.example.birch.ui.YourSpendings.TransactionsFragment"

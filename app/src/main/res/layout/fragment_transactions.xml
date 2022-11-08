@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Your Spendings"
+        android:text="Your Spending"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -21,20 +21,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_pastTransactions"
+        android:id="@+id/ARCHIVE_rv_recentTransactions"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/tabs_transactions" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/tabs_transactions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -47,7 +48,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Past"
+            android:text="Recent"
             tools:layout_editor_absoluteX="-11dp"
             tools:layout_editor_absoluteY="59dp" />
 
@@ -57,5 +58,16 @@
             android:text="Upcoming" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager_transactions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabs_transactions" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

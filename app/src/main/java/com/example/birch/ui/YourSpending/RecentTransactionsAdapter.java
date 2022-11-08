@@ -1,4 +1,4 @@
-package com.example.birch.ui.YourSpendings;
+package com.example.birch.ui.YourSpending;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -41,7 +41,7 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
 
         holder.tv_title.setText(transactionModels.get(position).getTitle());
         holder.tv_total.setText(transactionModels.get(position).getTotal());
-        // holder.tv_date.setText(transactionModels.get(position).getDate());
+        holder.tv_date.setText(transactionModels.get(position).getDate());
 
     }
 
@@ -50,7 +50,7 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
 
     public static class RecentTransactionsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_total, tv_title;
+        TextView tv_total, tv_title, tv_date;
 
         // getting the views from "list_item_transaction" file and assigning to vars
         // Kinda like the onCreate method
@@ -59,6 +59,7 @@ public class RecentTransactionsAdapter extends RecyclerView.Adapter<RecentTransa
 
             tv_title = itemView.findViewById(R.id.tv_transaction_title);
             tv_total = itemView.findViewById(R.id.tv_transaction_total);
+            tv_date = itemView.findViewById(R.id.tv_transaction_date);
         }
     }
 }

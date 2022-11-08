@@ -1,12 +1,9 @@
-package com.example.birch.ui.YourSpendings;
+package com.example.birch.ui.YourSpending;
 
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -49,7 +46,6 @@ public class TransactionsFragment extends Fragment {
 
         vp_Adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(vp_Adapter);
-
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 

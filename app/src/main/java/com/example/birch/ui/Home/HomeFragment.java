@@ -137,9 +137,6 @@ public class HomeFragment extends Fragment {
         for(int i = 0; i < bankNames.length; i++) {
             bankInfoModels.add(new BankInfoModel(bankNames[i], accountTotals[i], accountType[i]));
         }
-
-
-
     }
 
     @Override

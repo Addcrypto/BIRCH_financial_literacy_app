@@ -1,4 +1,4 @@
-package com.example.birch.ui.YourSpendings;
+package com.example.birch.ui.YourSpending;
 
 import android.content.Context;
 import android.os.Bundle;

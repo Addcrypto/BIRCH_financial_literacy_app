@@ -2,4 +2,9 @@
     <string name="app_name">BIRCH</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="insert_arrows">Arrow>></string>
+    <string-array name="reconmends">
+        <item>Your Deal is Here</item>
+        <item>0% APY Waiting For You</item>
+    </string-array>
 </resources>

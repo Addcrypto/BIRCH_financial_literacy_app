@@ -78,4 +78,9 @@ dependencies {
 
     // For the piechart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    //For the fading text in the recommendations section
+    implementation 'com.github.rosenpin:fading-text-view:3.0'
+
+
 }

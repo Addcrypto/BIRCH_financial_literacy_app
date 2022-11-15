@@ -1,15 +1,19 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services' // Google Service
+    id 'kotlin-android'
 }
 android {
     namespace 'com.example.birch'
     compileSdk 32
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.example.birch"
+        minSdkVersion 21
         minSdk 21
         targetSdk 32
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -83,5 +87,16 @@ dependencies {
     implementation 'com.github.rosenpin:fading-text-view:3.0'
 
     // For Plaid API integration
-    implementation 'com.plaid.link:sdk-core:3.10.1'
+    def lifecycle_version = "2.5.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "com.plaid.link:sdk-core:3.10.1"
+
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.google.code.gson:gson:2.8.6"
 }

@@ -69,6 +69,17 @@
             app:layout_constraintStart_toEndOf="@+id/tv_yourFinancials_title"
             app:layout_constraintTop_toTopOf="@+id/tv_yourFinancials_title" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/link_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:text="Link +"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rv_home_YourFinancials"
+            app:layout_constraintStart_toEndOf="@+id/tv_yourFinancials_total"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -118,6 +129,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_yourFinancials_debt_title"
             app:layout_constraintStart_toEndOf="@+id/tv_yourFinancials_debt_title"
             app:layout_constraintTop_toTopOf="@+id/tv_yourFinancials_debt_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/link_debt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:text="Link +"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rv_yourFinancials_Debt"
+            app:layout_constraintStart_toEndOf="@+id/tv_yourFinancials_debt_total"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

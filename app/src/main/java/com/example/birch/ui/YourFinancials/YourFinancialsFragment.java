@@ -3,6 +3,7 @@ package com.example.birch.ui.YourFinancials;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,12 +11,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.birch.R;
 import com.example.birch.models.BankInfoModel;
 import com.example.birch.ui.Home.BankInfo_RecyclerViewAdapter;
 
+import com.plaid.link.OpenPlaidLink;
+import com.plaid.link.configuration.LinkTokenConfiguration;
+import com.plaid.link.result.LinkAccount;
+import com.plaid.link.result.LinkAccountBalance;
+import com.plaid.link.result.LinkError;
+import com.plaid.link.result.LinkErrorCode;
+import com.plaid.link.result.LinkExit;
+import com.plaid.link.result.LinkSuccess;
+import com.plaid.link.result.LinkSuccessMetadata;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +38,38 @@ import java.util.ArrayList;
 public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
+
+    //Retrieval of Link Token
+    LinkTokenConfiguration linkTokenConfiguration = new LinkTokenConfiguration.Builder()
+            .token("LINK_TOKEN_FROM_SERVER")
+            .build();
+
+    //Retrieval of data
+    private ActivityResultLauncher<LinkTokenConfiguration> linkAccountToPlaid = registerForActivityResult(
+            new OpenPlaidLink(),
+            result -> {
+                if (result instanceof LinkSuccess) {
+                    LinkSuccess success = (LinkSuccess) result;
+
+                    String publicToken = success.getPublicToken();
+                    LinkSuccessMetadata metadata = success.getMetadata();
+                    for(LinkAccount account : success.component2().getAccounts()){
+                        String accountId = account.getId();
+                        String accountName = account.getName();
+                        String accountMask = account.getMask();
+                        LinkAccountBalance accountBalance = account.getBalance();
+                    }
+                    String bankName = metadata.getInstitution().getName();
+                }
+                else {
+                    LinkExit exit = (LinkExit) result;
+                    LinkError error = exit.getError();
+                    LinkErrorCode errorCode = error.getErrorCode();
+                    String errorMessage = error.getErrorMessage();
+                    String displayMessage = error.getDisplayMessage();
+                }
+            }
+    );
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,6 +105,12 @@ public class YourFinancialsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*
+        TO DO:
+        OnClickLister for each link button
+         */
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

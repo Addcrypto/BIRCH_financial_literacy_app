@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Match password with database then login if it matches.
                                 if(fetchPassword.equals(ipt_Pwd)) {
-                                    Toast.makeText(LoginActivity.this, "Successful login!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }

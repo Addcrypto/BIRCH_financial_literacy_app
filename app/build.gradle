@@ -82,5 +82,6 @@ dependencies {
     //For the fading text in the recommendations section
     implementation 'com.github.rosenpin:fading-text-view:3.0'
 
-
+    // For Plaid API integration
+    implementation 'com.plaid.link:sdk-core:3.10.1'
 }

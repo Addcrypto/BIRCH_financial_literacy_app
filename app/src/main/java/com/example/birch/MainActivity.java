@@ -9,13 +9,14 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.birch.ui.Recommendations.RecommendationsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//implements View.OnClickListener
+
 public class MainActivity extends AppCompatActivity{
     NavController navController;
-
+    private Button button_rf;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +33,17 @@ public class MainActivity extends AppCompatActivity{
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         //recommendation button
-        //View v = findViewById(R.id.recommendation_button_id);
-        //v.setOnClickListener(this);
+        button_rf = (Button) findViewById(R.id.recommendation_button_id);
+        button_rf.setOnClickListener(new View.OnClickListener(){
+            @Override
+                public void onClick(View v){
+            {
+                move_to_recommend();
+            }
+        }
+        });
     }
-    public void move_to_recommend(View view) {
+    public void move_to_recommend() {
 
             Intent Reco_Button = new Intent(this, RecommendationsFragment.class);
             this.startActivity(Reco_Button);

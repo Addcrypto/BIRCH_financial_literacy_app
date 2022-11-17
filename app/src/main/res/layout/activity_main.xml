@@ -26,4 +26,15 @@
         app:labelVisibilityMode="labeled"
         />
 
+    <Button
+        android:id="@+id/recommendation_button_id"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="25dp"
+        android:onClick="move_to_recommend"
+        android:text="recommendations"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </RelativeLayout>

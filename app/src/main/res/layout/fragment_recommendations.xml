@@ -33,12 +33,13 @@
 
 
     <Button
-        android:id="@+id/button_id"
+        android:id="@+id/URL_button_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
         android:layout_marginTop="400dp"
         android:text="@string/insert_arrows"
+        android:onClick="URL_action"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

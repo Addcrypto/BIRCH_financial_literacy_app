@@ -1,5 +1,7 @@
 package com.example.birch.ui.Recommendations;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -55,12 +57,27 @@ public class RecommendationsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
+    public void URL_action(View view)
+    {
+        Intent BoA_URL = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.bankofamerica.com/credit-cards/cash-back-credit-cards"));
+        startActivity(BoA_URL);
+
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recommendations, container, false);
     }
+
+
+
+
 }

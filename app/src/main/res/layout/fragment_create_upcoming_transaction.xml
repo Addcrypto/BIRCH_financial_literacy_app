@@ -38,15 +38,14 @@
         android:id="@+id/et_billDueDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="Due Date"
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_setBillDueDate"
         app:layout_constraintTop_toBottomOf="@+id/et_billAmount" />
 
     <EditText
@@ -70,7 +69,7 @@
         android:layout_marginTop="16dp"
         android:text="Repeats"
         android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="@+id/et_billDueDate"
+        app:layout_constraintStart_toStartOf="@+id/spinner_billRepeats"
         app:layout_constraintTop_toBottomOf="@+id/et_billDueDate" />
 
     <Spinner
@@ -91,11 +90,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="#000000"
         android:text="Create"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_cancelBill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -111,5 +110,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/et_billAmount"
         app:layout_constraintVertical_bias="0.423" />
+
+    <Button
+        android:id="@+id/btn_setBillDueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:backgroundTint="@color/black"
+        android:text="Set Date"
+        android:textColor="@color/ic_launcher_background"
+        app:cornerRadius="5sp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_billDueDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/et_billDueDate" />
+
+    <Button
+        android:id="@+id/btn_cancelBill"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/primary"
+        android:text="Cancel"
+        android:textColor="@color/ic_launcher_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

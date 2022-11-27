@@ -41,7 +41,7 @@ public class UpcomingTransactionsAdapter extends RecyclerView.Adapter<UpcomingTr
 
         holder.tv_title.setText(transactionModels.get(position).getTitle());
         holder.tv_total.setText(transactionModels.get(position).getTotal());
-         holder.tv_date.setText(transactionModels.get(position).getDate());
+        holder.tv_date.setText(transactionModels.get(position).getDate());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class UpcomingTransactionsAdapter extends RecyclerView.Adapter<UpcomingTr
 
             tv_title = itemView.findViewById(R.id.tv_transaction_title);
             tv_total = itemView.findViewById(R.id.tv_transaction_total);
-             tv_date = itemView.findViewById(R.id.tv_transaction_date);
+            tv_date = itemView.findViewById(R.id.tv_transaction_date);
         }
     }
 }

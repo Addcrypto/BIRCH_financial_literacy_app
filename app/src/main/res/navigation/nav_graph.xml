@@ -47,5 +47,9 @@
         android:id="@+id/createUpcomingTransactionFragment"
         android:name="com.example.birch.ui.YourSpending.CreateUpcomingTransactionFragment"
         android:label="fragment_create_upcoming_transaction"
-        tools:layout="@layout/fragment_create_upcoming_transaction" />
+        tools:layout="@layout/fragment_create_upcoming_transaction" >
+        <action
+            android:id="@+id/action_createUpcomingTransactionFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
+    </fragment>
 </navigation>

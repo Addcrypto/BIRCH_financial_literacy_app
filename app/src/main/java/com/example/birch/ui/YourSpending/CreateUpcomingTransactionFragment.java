@@ -1,20 +1,26 @@
 package com.example.birch.ui.YourSpending;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.birch.R;
+
+import java.text.DateFormat;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,8 +30,12 @@ import com.example.birch.R;
 public class CreateUpcomingTransactionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     EditText et_billAmount;
     EditText et_billName;
-    DatePicker et_billDate;
+    EditText et_billDate;
+    Button btn_setBillDueDate;
     Spinner spinner_billEvery;
+
+    Button btn_cancelBill;
+    Button btn_createBill;
 
     View view;
     Context ctx;
@@ -63,7 +73,6 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         /*
@@ -81,12 +90,53 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         view = inflater.inflate(R.layout.fragment_create_upcoming_transaction, container, false);
         ctx = getActivity().getApplicationContext();
 
-        spinner_billEvery = view.findViewById(R.id.spinner_billRepeats);
+        spinner_billEvery = (Spinner) view.findViewById(R.id.spinner_billRepeats);
+        et_billAmount = (EditText) view.findViewById(R.id.et_billAmount);
+        et_billName = (EditText) view.findViewById(R.id.et_billName);
+        et_billDate = (EditText) view.findViewById(R.id.et_billDueDate);
+        btn_setBillDueDate = (Button) view.findViewById(R.id.btn_setBillDueDate);
+
+        btn_cancelBill = (Button) view.findViewById(R.id.btn_cancelBill);
+        btn_createBill = (Button) view.findViewById(R.id.btn_createBill);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ctx, R.array.billRepeats, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_billEvery.setAdapter(adapter);
         spinner_billEvery.setOnItemSelectedListener(this);
+
+        btn_setBillDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        Calendar c = Calendar.getInstance();
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, month);
+                        c.set(Calendar.DAY_OF_MONTH, day);
+
+                        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+                        et_billDate.setText(currentDateString);
+                    }
+                }, year, month, day);
+
+                dialog.show();
+
+            }
+        });
+
+        btn_cancelBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: clear edit text fields
+                Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+            }
+        });
 
         return view;
     }
@@ -98,7 +148,5 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 }

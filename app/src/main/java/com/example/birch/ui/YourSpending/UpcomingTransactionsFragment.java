@@ -69,9 +69,7 @@ public class UpcomingTransactionsFragment extends Fragment {
         btn_addUpcomingTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // ActionUpcomingTransactionsFragmentToCreateUpcomingTransactionFragment action =
                 Navigation.findNavController(v).navigate(R.id.createUpcomingTransactionFragment);
-                // @NonNull NavDirections action =
             }
         });
 

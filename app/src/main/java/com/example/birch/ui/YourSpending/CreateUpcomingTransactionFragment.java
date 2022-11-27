@@ -1,5 +1,6 @@
 package com.example.birch.ui.YourSpending;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,23 +8,27 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.birch.R;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CreateUpcomingTransactionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CreateUpcomingTransactionFragment extends Fragment {
+public class CreateUpcomingTransactionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     EditText et_billAmount;
     EditText et_billName;
     DatePicker et_billDate;
-    View view;
+    Spinner spinner_billEvery;
 
+    View view;
+    Context ctx;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,9 +79,26 @@ public class CreateUpcomingTransactionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_create_upcoming_transaction, container, false);
+        ctx = getActivity().getApplicationContext();
 
+        spinner_billEvery = view.findViewById(R.id.spinner_billRepeats);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ctx, R.array.billRepeats, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_billEvery.setAdapter(adapter);
+        spinner_billEvery.setOnItemSelectedListener(this);
 
         return view;
+    }
+
+    @Override
+    // public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+        String text = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

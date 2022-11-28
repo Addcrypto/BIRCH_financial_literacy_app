@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.birch.R;
+import com.example.birch.models.UpcomingTransactionModel;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -39,6 +42,7 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
 
     View view;
     Context ctx;
+    String repeatsSelected;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -130,6 +134,33 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
             }
         });
 
+        DAOUpcomingTransaction dao = new DAOUpcomingTransaction();
+        btn_createBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UpcomingTransactionModel t = new UpcomingTransactionModel(
+                        et_billName.getText().toString(),
+                        Float.parseFloat(et_billAmount.getText().toString()),
+                        et_billDate.getText().toString(),
+                        // UpcomingTransactionModel.Repeats.valueOf(repeatsSelected)
+                        repeatsSelected
+                );
+
+                Log.i("new bill", t.toString());
+
+                dao.add(t)
+                    .addOnSuccessListener(suc -> {
+                        Toast.makeText(ctx, "Bill Created", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                    })
+                    .addOnFailureListener(er -> {
+                        Toast.makeText(ctx, "Failed to create bill", Toast.LENGTH_SHORT).show();
+                    });
+
+
+            }
+        });
+
         btn_cancelBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +175,11 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
     @Override
     // public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
-        String text = parent.getItemAtPosition(position).toString();
+        repeatsSelected = parent
+                .getItemAtPosition(position)
+                .toString();
+//                .replace(" ", "_")
+//                .toUpperCase();
     }
 
     @Override

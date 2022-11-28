@@ -16,7 +16,11 @@ import android.view.ViewGroup;
 
 import com.example.birch.R;
 import com.example.birch.models.TransactionModel;
+import com.example.birch.models.UpcomingTransactionModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -24,9 +28,11 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class UpcomingTransactionsFragment extends Fragment {
-    ArrayList<TransactionModel> transactionModels = new ArrayList<>();
+    // ArrayList<TransactionModel> transactionModels = new ArrayList<>();
     FloatingActionButton btn_addUpcomingTransaction;
     View view;
+    DAOUpcomingTransaction dao;
+    UpcomingTransactionsAdapter adapter;
 
     public UpcomingTransactionsFragment() {
         // Required empty public constructor
@@ -37,10 +43,11 @@ public class UpcomingTransactionsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        setupTransactionModels();
+        // setupTransactionModels();
     }
 
     // for testing
+    /*
     private void setupTransactionModels() {
         String[] titles = {"Spotify Premium", "Credit Card"};
         String[] totals = {"$10", "$250"};
@@ -49,6 +56,28 @@ public class UpcomingTransactionsFragment extends Fragment {
             transactionModels.add(new TransactionModel(totals[i], titles[i], "11/11/22"));
         }
     }
+    */
+
+    private void loadData() {
+        dao.get().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<UpcomingTransactionModel> transactionModels = new ArrayList<>();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    UpcomingTransactionModel tr = data.getValue(UpcomingTransactionModel.class);
+                    transactionModels.add(tr);
+                }
+
+                adapter.setItems(transactionModels);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,13 +85,18 @@ public class UpcomingTransactionsFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_upcoming_transactions, container, false);
         Context ctx = getActivity().getApplicationContext();
+        dao = new DAOUpcomingTransaction();
 
         RecyclerView rv_transactions = view.findViewById(R.id.rv_upcomingTransactions);
         rv_transactions.setHasFixedSize(true);
 
-        UpcomingTransactionsAdapter adapter = new UpcomingTransactionsAdapter(ctx, transactionModels);
+        // adapter = new UpcomingTransactionsAdapter(ctx, transactionModels);
+        adapter = new UpcomingTransactionsAdapter(ctx);
         rv_transactions.setAdapter(adapter);
         rv_transactions.setLayoutManager(new LinearLayoutManager(ctx));
+
+        // Call load data after adapter is created
+        loadData();
 
         btn_addUpcomingTransaction = (FloatingActionButton) view.findViewById(R.id.btn_addUpcomingTransaction);
 

@@ -2,20 +2,23 @@ package com.example.birch.models;
 
 
 public class UpcomingTransactionModel {
-    enum Repeats {
-        ONE_TIME,
-        DAILY,
-        WEEKLY,
-        MONTHLY,
-        YEARLY
-    }
+//    public enum Repeats {
+//        ONE_TIME,
+//        DAILY,
+//        WEEKLY,
+//        MONTHLY,
+//        YEARLY
+//    }
 
+    //TODO: private String ownerEmail;
     private String name;
     private float amount;
     private String dueDate;
-    private Repeats repeats;
+    private String repeats;
 
-    public UpcomingTransactionModel(String name, float amount, String dueDate, Repeats repeats) {
+    public UpcomingTransactionModel () {}
+
+    public UpcomingTransactionModel(String name, float amount, String dueDate, String repeats) {
         this.name = name;
         this.amount = amount;
         this.dueDate = dueDate;
@@ -31,8 +34,8 @@ public class UpcomingTransactionModel {
     public String getDueDate() { return dueDate; }
     public void setDueDate(String dueDate) { this.dueDate = dueDate; }
 
-    public Repeats getRepeats() { return repeats; }
-    public void setRepeats(Repeats repeats) { this.repeats = repeats; }
+    public String getRepeats() { return repeats; }
+    public void setRepeats(String repeats) { this.repeats = repeats; }
 
     @Override
     public String toString() {

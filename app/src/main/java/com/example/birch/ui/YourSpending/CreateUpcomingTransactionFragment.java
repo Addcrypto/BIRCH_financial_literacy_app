@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.birch.R;
+import com.example.birch.SP_LocalStorage;
 import com.example.birch.models.UpcomingTransactionModel;
 
 import java.text.DateFormat;
@@ -138,7 +139,9 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         btn_createBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SP_LocalStorage sp = new SP_LocalStorage(ctx);
                 UpcomingTransactionModel t = new UpcomingTransactionModel(
+                        sp.getCurrentUserEmail(),
                         et_billName.getText().toString(),
                         Float.parseFloat(et_billAmount.getText().toString()),
                         et_billDate.getText().toString(),

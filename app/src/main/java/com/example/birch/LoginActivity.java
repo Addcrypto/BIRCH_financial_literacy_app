@@ -3,7 +3,9 @@ package com.example.birch;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +79,13 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Match password with database then login if it matches.
                                 if(fetchPassword.equals(ipt_Pwd)) {
+                                    // Add user data to shared preferences to access later
+                                    SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putBoolean("isLoggedIn", true);
+                                    editor.putString("userEmail", ipt_Email);
+
+                                    editor.apply();
                                     Toast.makeText(LoginActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);

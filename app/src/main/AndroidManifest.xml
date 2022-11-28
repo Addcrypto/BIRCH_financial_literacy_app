@@ -22,7 +22,14 @@
         <!-- Intro Screen ! -->
         <activity
             android:name=".IntroScreen"
-            android:exported="true"></activity> <!-- Register and Login ! -->
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
+        </activity> <!-- Register and Login ! -->
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />

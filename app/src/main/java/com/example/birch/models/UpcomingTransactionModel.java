@@ -1,6 +1,9 @@
 package com.example.birch.models;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UpcomingTransactionModel {
 //    public enum Repeats {
 //        ONE_TIME,
@@ -17,6 +20,7 @@ public class UpcomingTransactionModel {
     private float amount;
     private String dueDate;
     private String repeats;
+    private String id;
 
     public UpcomingTransactionModel () {}
 
@@ -43,10 +47,14 @@ public class UpcomingTransactionModel {
     public String getOwnerEmail() { return ownerEmail; }
     public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
 
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+
     @Override
     public String toString() {
         return "UpcomingTransactionModel{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", amount=" + amount +
                 ", dueDate='" + dueDate + '\'' +
                 ", ownerEmail='" + ownerEmail + '\'' +
@@ -54,5 +62,15 @@ public class UpcomingTransactionModel {
                 '}';
     }
 
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        // result.put("key", this.id);
+        result.put("amount", this.amount);
+        result.put("dueDate", this.dueDate);
+        result.put("name", this.name);
+        result.put("repeats", this.repeats);
+
+        return result;
+    }
 
 }

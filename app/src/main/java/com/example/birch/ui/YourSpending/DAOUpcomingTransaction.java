@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class DAOUpcomingTransaction {
     private DatabaseReference databaseReference;
@@ -32,8 +33,9 @@ public class DAOUpcomingTransaction {
         return databaseReference.child(key).removeValue();
     }
 
-    public Query get()
-    {
+    public Query get(String key) { return databaseReference.child(key); }
+    public Query get() {
         return databaseReference;
     }
+
 }

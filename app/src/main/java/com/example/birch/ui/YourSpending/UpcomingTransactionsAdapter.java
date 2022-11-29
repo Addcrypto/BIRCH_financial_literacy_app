@@ -18,8 +18,13 @@ import java.util.ArrayList;
 
 public class UpcomingTransactionsAdapter extends RecyclerView.Adapter<UpcomingTransactionsAdapter.UpcomingTransactionsViewHolder> {
     Context context;
-    // ArrayList<TransactionModel> transactionModels = new ArrayList<>();
     ArrayList<UpcomingTransactionModel> transactionModels = new ArrayList<>();
+
+    // For recycler view item click
+    public interface OnItemClickListener {
+        void onItemClick(UpcomingTransactionModel tr);
+    }
+    private UpcomingTransactionsAdapter.OnItemClickListener listener;
 
     // get values for the context and model
     // public UpcomingTransactionsAdapter(Context context, ArrayList<TransactionModel> transactionModels) {
@@ -62,7 +67,8 @@ public class UpcomingTransactionsAdapter extends RecyclerView.Adapter<UpcomingTr
     @Override
     public int getItemCount() { return transactionModels.size(); }
 
-    public static class UpcomingTransactionsViewHolder extends RecyclerView.ViewHolder {
+//    public static class UpcomingTransactionsViewHolder extends RecyclerView.ViewHolder {
+    public class UpcomingTransactionsViewHolder extends RecyclerView.ViewHolder {
 
         // TextView tv_total, tv_title, tv_date;
         TextView tv_amount, tv_name, tv_date, tv_repeats;
@@ -80,6 +86,24 @@ public class UpcomingTransactionsAdapter extends RecyclerView.Adapter<UpcomingTr
             tv_amount = itemView.findViewById(R.id.tv_billAmount);
             tv_date = itemView.findViewById(R.id.tv_billDate);
             tv_repeats = itemView.findViewById(R.id.tv_billRepeats);
+
+
+            // When list item is clicked send the model information to the event handlers
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(listener != null && pos != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(transactionModels.get(pos));
+                    }
+
+                }
+            });
         }
     }
+
+    public void setOnItemClickListener(UpcomingTransactionsAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
 }

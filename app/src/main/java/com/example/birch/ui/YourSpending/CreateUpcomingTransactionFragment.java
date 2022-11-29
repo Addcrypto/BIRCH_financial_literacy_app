@@ -2,8 +2,10 @@ package com.example.birch.ui.YourSpending;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -22,8 +24,13 @@ import android.widget.Toast;
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
 import com.example.birch.models.UpcomingTransactionModel;
+import com.google.android.gms.common.util.ArrayUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -44,6 +51,22 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
     View view;
     Context ctx;
     String repeatsSelected;
+
+    SP_LocalStorage storage;
+    SharedPreferences.Editor editor;
+
+    String[] spinnerValues = {"One Time", "Weekly", "Monthly", "Yearly"};
+
+    UpcomingTransactionModel billBeingEdited;
+
+    int getIndexOf(String[] arr, String val) {
+        for (int i = 0; i < spinnerValues.length; i++) {
+            if (spinnerValues[i].equals(val))
+                return i;
+        }
+
+        return -1;
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -104,10 +127,17 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         btn_cancelBill = (Button) view.findViewById(R.id.btn_cancelBill);
         btn_createBill = (Button) view.findViewById(R.id.btn_createBill);
 
+        storage = new SP_LocalStorage(ctx);
+        editor = storage.getEditor();
+        Boolean isEditingBill = storage.getIsEditingBill();
+        String billBeingEditedId = storage.getCurrentBillId();
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ctx, R.array.billRepeats, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_billEvery.setAdapter(adapter);
         spinner_billEvery.setOnItemSelectedListener(this);
+
+        DAOUpcomingTransaction dao = new DAOUpcomingTransaction();
 
         btn_setBillDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,31 +165,79 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
             }
         });
 
-        DAOUpcomingTransaction dao = new DAOUpcomingTransaction();
+        // UpcomingTransactionModel billBeingEdited;
+        if (isEditingBill) {
+            btn_createBill.setText("Update");
+
+            // Get data from bill selected and populate edit text fields
+            dao.get(billBeingEditedId).addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                     // for (DataSnapshot data : snapshot.g)
+                     // billBeingEdited = snapshot.getValue(UpcomingTransactionModel.class);
+                     billBeingEdited = snapshot.getValue(UpcomingTransactionModel.class);
+                     billBeingEdited.setId(snapshot.getKey());
+                     Log.i("Bill being edited", billBeingEdited.toString());
+
+                     // Update input fields
+                     et_billName.setText(billBeingEdited.getName());
+                     et_billAmount.setText(
+                         String.format("%.02f", billBeingEdited.getAmount())
+                     );
+                     et_billDate.setText(billBeingEdited.getDueDate());
+
+                     int spinnerIdx = getIndexOf(spinnerValues, billBeingEdited.getRepeats());
+                     spinner_billEvery.setSelection(spinnerIdx);
+                 }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
+
         btn_createBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SP_LocalStorage sp = new SP_LocalStorage(ctx);
-                UpcomingTransactionModel t = new UpcomingTransactionModel(
+
+                if (isEditingBill) {
+                    // Update bill
+
+                    // set values in model being edited
+                    billBeingEdited.setName(et_billName.getText().toString());
+                    billBeingEdited.setAmount(Float.parseFloat(et_billAmount.getText().toString()));
+                    billBeingEdited.setDueDate(et_billDate.getText().toString());
+                    billBeingEdited.setRepeats(repeatsSelected);
+                    dao.update(billBeingEditedId, billBeingEdited.toMap())
+                        .addOnSuccessListener(suc -> {
+                            Toast.makeText(ctx, "Bill Updated", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                        })
+                        .addOnFailureListener(er -> {
+                            Toast.makeText(ctx, "Failed to update bill", Toast.LENGTH_SHORT).show();
+                        });
+
+                } else {
+                    // Create new bill
+                    UpcomingTransactionModel t = new UpcomingTransactionModel(
                         sp.getCurrentUserEmail(),
                         et_billName.getText().toString(),
                         Float.parseFloat(et_billAmount.getText().toString()),
                         et_billDate.getText().toString(),
-                        // UpcomingTransactionModel.Repeats.valueOf(repeatsSelected)
                         repeatsSelected
-                );
+                    );
 
-                Log.i("new bill", t.toString());
+                    Log.i("New bill created: ", t.toString());
 
-                dao.add(t)
-                    .addOnSuccessListener(suc -> {
-                        Toast.makeText(ctx, "Bill Created", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(view).navigate(R.id.transactionsFragment);
-                    })
-                    .addOnFailureListener(er -> {
-                        Toast.makeText(ctx, "Failed to create bill", Toast.LENGTH_SHORT).show();
-                    });
-
+                    dao.add(t)
+                        .addOnSuccessListener(suc -> {
+                            Toast.makeText(ctx, "Bill Created", Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                        })
+                        .addOnFailureListener(er -> {
+                            Toast.makeText(ctx, "Failed to create bill", Toast.LENGTH_SHORT).show();
+                        });
+                }
 
             }
         });
@@ -187,4 +265,13 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        editor.putBoolean("isEditingBill", false);
+        editor.apply();
+        Log.i("CreateUpcomingFragment", "CreateUpcomingTransactionFragment Destroyed. isEditingBill: " + Boolean.toString(storage.getIsEditingBill()));
+    }
 }

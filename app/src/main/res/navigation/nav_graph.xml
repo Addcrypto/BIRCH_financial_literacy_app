@@ -51,5 +51,16 @@
         <action
             android:id="@+id/action_createUpcomingTransactionFragment_to_transactionsFragment"
             app:destination="@id/transactionsFragment" />
+        <argument android:name="billName"
+            app:argType="string" />
+        <argument
+            android:name="billDate"
+            app:argType="string" />
+        <argument
+            android:name="billRepeats"
+            app:argType="string" />
+        <argument
+            android:name="billAmount"
+            app:argType="float" />
     </fragment>
 </navigation>

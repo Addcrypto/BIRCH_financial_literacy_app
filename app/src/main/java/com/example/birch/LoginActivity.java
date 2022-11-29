@@ -84,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putBoolean("isLoggedIn", true);
                                     editor.putString("userEmail", ipt_Email);
-
                                     editor.apply();
+
                                     Toast.makeText(LoginActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);

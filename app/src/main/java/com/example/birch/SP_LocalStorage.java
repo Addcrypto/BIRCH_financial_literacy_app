@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SP_LocalStorage {
-    private SharedPreferences sp;
+    public SharedPreferences sp;
 
     public SP_LocalStorage(Context ctx) {
-        sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
+        this.sp = ctx.getSharedPreferences("sharedPrefs", ctx.MODE_PRIVATE);
     }
 
     public SharedPreferences getSP() { return this.sp; }
@@ -16,4 +16,6 @@ public class SP_LocalStorage {
     // public int getLoggedInUserId() { return this.sp.getInt("userId", -1); }
     public boolean getIsLoggedIn() { return this.sp.getBoolean("isLoggedIn", false); }
     public String getCurrentUserEmail() { return this.sp.getString("userEmail", ""); }
+    public Boolean getIsEditingBill() { return this.sp.getBoolean("isEditingBill", false); }
+    public String getCurrentBillId() { return this.sp.getString("currentBillId", ""); }
 }

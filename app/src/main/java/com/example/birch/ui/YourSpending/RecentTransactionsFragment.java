@@ -36,7 +36,7 @@ public class RecentTransactionsFragment extends Fragment {
     // for testing
     private void setupTransactionModels() {
         String[] titles = {"Gas Station", "Restaurant", "Grocery Store"};
-        String[] totals = {"-$30.00", "-$20", "-$100"};
+        String[] totals = {"30.00", "20", "100"};
 
 
         for(int i = 0; i < titles.length; i++) {

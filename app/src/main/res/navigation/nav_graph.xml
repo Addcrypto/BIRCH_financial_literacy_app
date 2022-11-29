@@ -21,18 +21,46 @@
         android:label="fragment_recommendations"
         tools:layout="@layout/fragment_recommendations" />
     <fragment
-        android:id="@+id/futureTransactionsFragment"
+        android:id="@+id/upcomingTransactionsFragment"
         android:name="com.example.birch.ui.YourSpending.UpcomingTransactionsFragment"
-        android:label="fragment_future_transactions"
-        tools:layout="@layout/fragment_upcoming_transactions" />
+        android:label="fragment_upcoming_transactions"
+        tools:layout="@layout/fragment_upcoming_transactions">
+        <action
+            android:id="@+id/action_upcomingTransactionsFragment_to_createUpcomingTransactionFragment"
+            app:destination="@id/createUpcomingTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="com.example.birch.ui.YourSpending.TransactionsFragment"
         android:label="fragment_transactions"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions" >
+        <action
+            android:id="@+id/action_transactionsFragment_to_createUpcomingTransactionFragment2"
+            app:destination="@id/createUpcomingTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.birch.ui.Home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/createUpcomingTransactionFragment"
+        android:name="com.example.birch.ui.YourSpending.CreateUpcomingTransactionFragment"
+        android:label="fragment_create_upcoming_transaction"
+        tools:layout="@layout/fragment_create_upcoming_transaction" >
+        <action
+            android:id="@+id/action_createUpcomingTransactionFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
+        <argument android:name="billName"
+            app:argType="string" />
+        <argument
+            android:name="billDate"
+            app:argType="string" />
+        <argument
+            android:name="billRepeats"
+            app:argType="string" />
+        <argument
+            android:name="billAmount"
+            app:argType="float" />
+    </fragment>
 </navigation>

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
@@ -36,6 +37,11 @@ public class UpcomingTransactionsFragment extends Fragment {
     View view;
     DAOUpcomingTransaction dao;
     UpcomingTransactionsAdapter adapter;
+    SP_LocalStorage storage;
+    TextView tv_noBills;
+    RecyclerView rv_transactions;
+
+    String ownerEmail;
 
     public UpcomingTransactionsFragment() {
         // Required empty public constructor
@@ -44,45 +50,43 @@ public class UpcomingTransactionsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        // setupTransactionModels();
     }
-
-    // for testing
-    /*
-    private void setupTransactionModels() {
-        String[] titles = {"Spotify Premium", "Credit Card"};
-        String[] totals = {"$10", "$250"};
-
-        for(int i = 0; i < titles.length; i++) {
-            transactionModels.add(new TransactionModel(totals[i], titles[i], "11/11/22"));
-        }
-    }
-    */
 
     private void loadData() {
-        // TODO: only get bills that belong to currently logged in user
         dao.get().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 ArrayList<UpcomingTransactionModel> transactionModels = new ArrayList<>();
                 for (DataSnapshot data : snapshot.getChildren()) {
+                    // TODO: figure out how to filter with firebase data instead of this if statement
                     UpcomingTransactionModel tr = data.getValue(UpcomingTransactionModel.class);
-                    // Log.i("item key", data.getKey());
-                    tr.setId(data.getKey());
-                    transactionModels.add(tr);
+                    // check if transaction is owned by logged in user
+                    if (tr.getOwnerEmail().equals(ownerEmail)) {
+                        // Log.i("item key", data.getKey());
+                        tr.setId(data.getKey());
+                        transactionModels.add(tr);
+                    }
                 }
 
-                adapter.setItems(transactionModels);
-                adapter.notifyDataSetChanged();
+                if(transactionModels.isEmpty()) {
+                    tv_noBills.setVisibility(View.VISIBLE);
+                    rv_transactions.setVisibility(View.INVISIBLE);
+                } else {
+                    tv_noBills.setVisibility(View.INVISIBLE);
+                    rv_transactions.setVisibility(View.VISIBLE);
+                    adapter.setItems(transactionModels);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
+    }
+
+    static String encodeEmail(String user) {
+        return user.replace(".", ",");
     }
 
     @Override
@@ -93,19 +97,22 @@ public class UpcomingTransactionsFragment extends Fragment {
         Context ctx = getActivity().getApplicationContext();
         dao = new DAOUpcomingTransaction();
         btn_addUpcomingTransaction = (FloatingActionButton) view.findViewById(R.id.btn_addUpcomingTransaction);
-        
-        SP_LocalStorage storage = new SP_LocalStorage(ctx);
+        tv_noBills = view.findViewById(R.id.tv_noBills);
+
+                storage = new SP_LocalStorage(ctx);
         SharedPreferences.Editor editor = storage.getEditor();
 
+        ownerEmail = encodeEmail(storage.getCurrentUserEmail());
+        Log.i("Storage Email", ownerEmail);
 
-        RecyclerView rv_transactions = view.findViewById(R.id.rv_upcomingTransactions);
+        rv_transactions = view.findViewById(R.id.rv_upcomingTransactions);
         rv_transactions.setHasFixedSize(true);
         rv_transactions.setLayoutManager(new LinearLayoutManager(ctx));
 
         adapter = new UpcomingTransactionsAdapter(ctx);
         rv_transactions.setAdapter(adapter);
 
-        // Call load data after adapter is created
+        // Call load data after adapter is created to call .setItems() in loadData()
         loadData();
 
         adapter.setOnItemClickListener(new UpcomingTransactionsAdapter.OnItemClickListener() {

@@ -34,6 +34,11 @@ public class DAOUpcomingTransaction {
     }
 
     public Query get(String key) { return databaseReference.child(key); }
+
+    public Query get(String collection, String property) {
+        return databaseReference.child(collection).child(property);
+    }
+
     public Query get() {
         return databaseReference;
     }

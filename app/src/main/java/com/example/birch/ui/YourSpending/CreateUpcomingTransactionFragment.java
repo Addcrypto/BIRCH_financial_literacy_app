@@ -20,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.birch.R;
@@ -40,7 +41,7 @@ import java.util.Calendar;
 public class CreateUpcomingTransactionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     EditText et_billAmount;
     EditText et_billName;
-    EditText et_billDate;
+    TextView et_billDate;
     Button btn_setBillDueDate;
     Spinner spinner_billEvery;
 
@@ -87,7 +88,7 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         spinner_billEvery = (Spinner) view.findViewById(R.id.spinner_billRepeats);
         et_billAmount = (EditText) view.findViewById(R.id.et_billAmount);
         et_billName = (EditText) view.findViewById(R.id.et_billName);
-        et_billDate = (EditText) view.findViewById(R.id.et_billDueDate);
+        et_billDate = (TextView) view.findViewById(R.id.et_billDueDate);
         btn_setBillDueDate = (Button) view.findViewById(R.id.btn_setBillDueDate);
 
         btn_createBill = (ImageView) view.findViewById(R.id.icon_createBill);

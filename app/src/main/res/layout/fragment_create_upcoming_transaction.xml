@@ -34,18 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
-    <EditText
+    <TextView
         android:id="@+id/et_billDueDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
-        android:hint="Due Date"
+        android:hint="No Due Date Set"
         android:inputType="date"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_setBillDueDate"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_billAmount" />
 
     <EditText
@@ -70,7 +72,7 @@
         android:text="Repeats"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/spinner_billRepeats"
-        app:layout_constraintTop_toBottomOf="@+id/et_billDueDate" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_setBillDueDate" />
 
     <Spinner
         android:id="@+id/spinner_billRepeats"
@@ -99,22 +101,26 @@
 
     <Button
         android:id="@+id/btn_setBillDueDate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:backgroundTint="@color/black"
         android:text="Set Date"
         android:textColor="@color/ic_launcher_background"
         app:cornerRadius="5sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_billDueDate"
+        app:icon="@drawable/ic_baseline_edit_calendar_24"
+        app:iconGravity="textStart"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_billDueDate" />
+        app:layout_constraintTop_toBottomOf="@+id/et_billDueDate" />
 
     <Button
         android:id="@+id/btn_createBill"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="#000000"
@@ -122,22 +128,19 @@
         android:textColor="#FFFFFF"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btn_cancelBill"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:backgroundTint="#6D7748"
         android:text="Cancel"
         android:textColor="@color/ic_launcher_background"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -157,16 +160,6 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_createBill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_begin="199dp"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView

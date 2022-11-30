@@ -24,7 +24,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="Bill Name (e.g Spotify Premium, etc.)"
@@ -32,37 +31,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
     <TextView
         android:id="@+id/et_billDueDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="No Due Date Set"
         android:inputType="date"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_billAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
     <EditText
         android:id="@+id/et_billAmount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:hint="Amount Due"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/et_billName" />
+        app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
     <TextView
         android:id="@+id/textView19"
@@ -70,7 +67,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Repeats"
-        android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/spinner_billRepeats"
         app:layout_constraintTop_toBottomOf="@+id/btn_setBillDueDate" />
 
@@ -109,9 +105,11 @@
         android:backgroundTint="@color/black"
         android:text="Set Date"
         android:textColor="@color/ic_launcher_background"
+        android:textSize="12sp"
         app:cornerRadius="5sp"
         app:icon="@drawable/ic_baseline_edit_calendar_24"
         app:iconGravity="textStart"
+        app:iconSize="16dp"
         app:iconTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -186,5 +184,32 @@
         android:src="@drawable/ic_baseline_keyboard_backspace_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="@+id/et_billName"
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Amount Due"
+        app:layout_constraintStart_toStartOf="@+id/textView20"
+        app:layout_constraintTop_toBottomOf="@+id/et_billName" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Due Date"
+        app:layout_constraintStart_toStartOf="@+id/et_billDueDate"
+        app:layout_constraintTop_toBottomOf="@+id/et_billAmount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

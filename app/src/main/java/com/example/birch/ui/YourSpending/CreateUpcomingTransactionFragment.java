@@ -18,19 +18,18 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
 import com.example.birch.models.UpcomingTransactionModel;
-import com.google.android.gms.common.util.ArrayUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -45,8 +44,9 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
     Button btn_setBillDueDate;
     Spinner spinner_billEvery;
 
-    Button btn_cancelBill;
-    Button btn_createBill;
+    ImageView btn_createBill;
+    ImageView btn_cancelBill;
+    Button btn_deleteBill;
 
     View view;
     Context ctx;
@@ -59,6 +59,15 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
 
     UpcomingTransactionModel billBeingEdited;
 
+    public CreateUpcomingTransactionFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+
+    // Helper method to get index of string in array
+    // used to get index of value in spinnerValues array
     int getIndexOf(String[] arr, String val) {
         for (int i = 0; i < spinnerValues.length; i++) {
             if (spinnerValues[i].equals(val))
@@ -66,49 +75,6 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         }
 
         return -1;
-    }
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public CreateUpcomingTransactionFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CreateUpcomingTransaction.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CreateUpcomingTransactionFragment newInstance(String param1, String param2) {
-        CreateUpcomingTransactionFragment fragment = new CreateUpcomingTransactionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        /*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        */
     }
 
     @Override
@@ -124,8 +90,9 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         et_billDate = (EditText) view.findViewById(R.id.et_billDueDate);
         btn_setBillDueDate = (Button) view.findViewById(R.id.btn_setBillDueDate);
 
-        btn_cancelBill = (Button) view.findViewById(R.id.btn_cancelBill);
-        btn_createBill = (Button) view.findViewById(R.id.btn_createBill);
+        btn_createBill = (ImageView) view.findViewById(R.id.icon_createBill);
+        btn_cancelBill = (ImageView) view.findViewById(R.id.icon_cancelBill);
+        btn_deleteBill = (Button) view.findViewById(R.id.btn_deleteBill);
 
         storage = new SP_LocalStorage(ctx);
         editor = storage.getEditor();
@@ -165,9 +132,19 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
             }
         });
 
-        // UpcomingTransactionModel billBeingEdited;
+        // If bill is being edited then show delete button and attach click listener
         if (isEditingBill) {
-            btn_createBill.setText("Update");
+            btn_deleteBill.setVisibility(View.VISIBLE);
+            btn_deleteBill.setOnClickListener(view -> {
+                dao.remove(billBeingEditedId)
+                    .addOnSuccessListener(suc -> {
+                        Toast.makeText(ctx, "Bill Deleted", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                    })
+                    .addOnFailureListener(er -> {
+                        Toast.makeText(ctx, "Failed to remove bill", Toast.LENGTH_SHORT).show();
+                    });
+            });
 
             // Get data from bill selected and populate edit text fields
             dao.get(billBeingEditedId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -193,62 +170,55 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
                  @Override
                  public void onCancelled(@NonNull DatabaseError error) { }
             });
+        } else {
+            btn_deleteBill.setVisibility(View.INVISIBLE);
         }
 
-        btn_createBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SP_LocalStorage sp = new SP_LocalStorage(ctx);
+        btn_createBill.setOnClickListener(view -> {
+            SP_LocalStorage sp = new SP_LocalStorage(ctx);
 
-                if (isEditingBill) {
-                    // Update bill
+            if (isEditingBill) {
+                // Update bill
 
-                    // set values in model being edited
-                    billBeingEdited.setName(et_billName.getText().toString());
-                    billBeingEdited.setAmount(Float.parseFloat(et_billAmount.getText().toString()));
-                    billBeingEdited.setDueDate(et_billDate.getText().toString());
-                    billBeingEdited.setRepeats(repeatsSelected);
-                    dao.update(billBeingEditedId, billBeingEdited.toMap())
-                        .addOnSuccessListener(suc -> {
-                            Toast.makeText(ctx, "Bill Updated", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.transactionsFragment);
-                        })
-                        .addOnFailureListener(er -> {
-                            Toast.makeText(ctx, "Failed to update bill", Toast.LENGTH_SHORT).show();
-                        });
+                // set values in model being edited
+                billBeingEdited.setName(et_billName.getText().toString());
+                billBeingEdited.setAmount(Float.parseFloat(et_billAmount.getText().toString()));
+                billBeingEdited.setDueDate(et_billDate.getText().toString());
+                billBeingEdited.setRepeats(repeatsSelected);
+                dao.update(billBeingEditedId, billBeingEdited.toMap())
+                    .addOnSuccessListener(suc -> {
+                        Toast.makeText(ctx, "Bill Updated", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                    })
+                    .addOnFailureListener(er -> {
+                        Toast.makeText(ctx, "Failed to update bill", Toast.LENGTH_SHORT).show();
+                    });
 
-                } else {
-                    // Create new bill
-                    UpcomingTransactionModel t = new UpcomingTransactionModel(
-                        sp.getCurrentUserEmail(),
-                        et_billName.getText().toString(),
-                        Float.parseFloat(et_billAmount.getText().toString()),
-                        et_billDate.getText().toString(),
-                        repeatsSelected
-                    );
+            } else {
+                // Create new bill
+                UpcomingTransactionModel t = new UpcomingTransactionModel(
+                    sp.getCurrentUserEmail(),
+                    et_billName.getText().toString(),
+                    Float.parseFloat(et_billAmount.getText().toString()),
+                    et_billDate.getText().toString(),
+                    repeatsSelected
+                );
 
-                    Log.i("New bill created: ", t.toString());
+                Log.i("New bill created: ", t.toString());
 
-                    dao.add(t)
-                        .addOnSuccessListener(suc -> {
-                            Toast.makeText(ctx, "Bill Created", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.transactionsFragment);
-                        })
-                        .addOnFailureListener(er -> {
-                            Toast.makeText(ctx, "Failed to create bill", Toast.LENGTH_SHORT).show();
-                        });
-                }
-
+                dao.add(t)
+                    .addOnSuccessListener(suc -> {
+                        Toast.makeText(ctx, "Bill Created", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(view).navigate(R.id.transactionsFragment);
+                    })
+                    .addOnFailureListener(er -> {
+                        Toast.makeText(ctx, "Failed to create bill", Toast.LENGTH_SHORT).show();
+                    });
             }
+
         });
 
-        btn_cancelBill.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: clear edit text fields
-                Navigation.findNavController(view).navigate(R.id.transactionsFragment);
-            }
-        });
+        btn_cancelBill.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.transactionsFragment));
 
         return view;
     }
@@ -259,8 +229,6 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
         repeatsSelected = parent
                 .getItemAtPosition(position)
                 .toString();
-//                .replace(" ", "_")
-//                .toUpperCase();
     }
 
     @Override

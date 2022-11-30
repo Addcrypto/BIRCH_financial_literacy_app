@@ -99,7 +99,7 @@ public class UpcomingTransactionsFragment extends Fragment {
         btn_addUpcomingTransaction = (FloatingActionButton) view.findViewById(R.id.btn_addUpcomingTransaction);
         tv_noBills = view.findViewById(R.id.tv_noBills);
 
-                storage = new SP_LocalStorage(ctx);
+        storage = new SP_LocalStorage(ctx);
         SharedPreferences.Editor editor = storage.getEditor();
 
         ownerEmail = encodeEmail(storage.getCurrentUserEmail());

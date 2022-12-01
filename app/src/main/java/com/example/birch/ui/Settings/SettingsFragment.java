@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.example.birch.MainActivity;
-import com.example.birch.PlaidTest;
 import com.example.birch.R;
 
 /**
@@ -89,8 +88,7 @@ public class SettingsFragment extends Fragment {
         bt_plaids.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PlaidTest.class);
-                startActivity(intent);
+
             }
         });
 

@@ -17,25 +17,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".PlaidTest"
-            android:exported="false" />
+            android:name=".InitialLinkActivity"
+            android:exported="true">
+        </activity>
+
         <!-- Intro Screen ! -->
         <activity
             android:name=".IntroScreen"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="true"></activity>
 
-
-        </activity> <!-- Register and Login ! -->
+        <!-- Register and Login ! -->
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" /> <!-- Main Activity ! -->
+            android:exported="true" />
+
+        <!-- Main Activity ! -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,7 +43,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

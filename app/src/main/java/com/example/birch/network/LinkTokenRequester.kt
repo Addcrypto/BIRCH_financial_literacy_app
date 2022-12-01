@@ -36,11 +36,11 @@ object LinkTokenRequester {
       .map { it.link_token }
 
 
-//  val AccToken
-//    get() = api.getAccToken()
-//      .subscribeOn(Schedulers.io())
-//      .observeOn(AndroidSchedulers.mainThread())
-//      .map { it.acc_token }
+  //val AccToken
+  //  get() = api.getAccToken()
+  //   .subscribeOn(Schedulers.io())
+  //   .observeOn(AndroidSchedulers.mainThread())
+  //   .map { it.acc_token }
 
   //Comment out the above and uncomment the below to use a curled Link Token
   //val token

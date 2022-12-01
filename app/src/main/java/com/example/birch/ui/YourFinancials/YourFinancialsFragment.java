@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.example.birch.R;
 import com.example.birch.RegisterActivity;
 import com.example.birch.models.BankInfoModel;
+import com.example.birch.network.LinkTokenRequester;
 import com.example.birch.ui.Home.BankInfo_RecyclerViewAdapter;
 
 import com.plaid.link.OpenPlaidLink;
+import com.plaid.link.Plaid;
 import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkAccount;
 import com.plaid.link.result.LinkAccountBalance;
@@ -28,6 +30,8 @@ import com.plaid.link.result.LinkErrorCode;
 import com.plaid.link.result.LinkExit;
 import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.result.LinkSuccessMetadata;
+import com.example.birch.network.LinkTokenRequester;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +46,6 @@ public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
     Button btn_linkAccount;
     Button btn_linkDebt;
-
-    //Retrieval of Link Token
-    LinkTokenConfiguration linkTokenConfiguration = new LinkTokenConfiguration.Builder()
-            .token("LINK_TOKEN_FROM_SERVER")
-            .build();
 
     //Retrieval of data
     private ActivityResultLauncher<LinkTokenConfiguration> linkAccountToPlaid = registerForActivityResult(
@@ -106,6 +105,31 @@ public class YourFinancialsFragment extends Fragment {
         }
     }
 
+    /**
+     * For all Link configuration options, have a look at the
+     * <a href="https://plaid.com/docs/link/android/#parameter-reference">parameter reference</>
+     */
+    private void openLink() {
+        LinkTokenRequester.INSTANCE.getToken()
+                .subscribe(this::onLinkTokenSuccess, this::onLinkTokenError);
+    }
+
+    private void onLinkTokenSuccess(String token) {
+        LinkTokenConfiguration configuration = new LinkTokenConfiguration.Builder()
+                .token(token)
+                .build();
+        linkAccountToPlaid.launch(configuration);
+    }
+
+    private void onLinkTokenError(Throwable error) {
+        Context ctx = getActivity().getApplicationContext();
+        if (error instanceof java.net.ConnectException) {
+            Toast.makeText(ctx, "There was an error while linking to your bank. Try again later.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,7 +143,8 @@ public class YourFinancialsFragment extends Fragment {
         btn_linkAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ctx, "link account clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ctx, "link account clicked", Toast.LENGTH_SHORT).show();
+                openLink();
             }
         });
 
@@ -127,6 +152,7 @@ public class YourFinancialsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(ctx, "link debt clicked", Toast.LENGTH_SHORT).show();
+                openLink();
             }
         });
 
@@ -139,7 +165,6 @@ public class YourFinancialsFragment extends Fragment {
         BankInfo_RecyclerViewAdapter adapter_2 = new BankInfo_RecyclerViewAdapter(ctx, debtInfoModels);
         rv_yourFinancials_debt.setAdapter(adapter_2);
         rv_yourFinancials_debt.setLayoutManager(new LinearLayoutManager(ctx));
-
 
         // Inflate the layout for this fragment
         return view;

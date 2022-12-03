@@ -33,11 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CreateUpcomingTransactionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateUpcomingTransactionFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     EditText et_billAmount;
     EditText et_billName;
@@ -177,14 +172,22 @@ public class CreateUpcomingTransactionFragment extends Fragment implements Adapt
 
         btn_createBill.setOnClickListener(view -> {
             SP_LocalStorage sp = new SP_LocalStorage(ctx);
+            String billName = et_billName.getText().toString().trim();
+            String billAmount = et_billAmount.getText().toString();
+            String billDueDate = et_billDate.getText().toString();
+
+            if(billName.isEmpty() || billAmount.isEmpty() || billDueDate.isEmpty()) {
+                Toast.makeText(ctx, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (isEditingBill) {
                 // Update bill
 
                 // set values in model being edited
-                billBeingEdited.setName(et_billName.getText().toString());
-                billBeingEdited.setAmount(Float.parseFloat(et_billAmount.getText().toString()));
-                billBeingEdited.setDueDate(et_billDate.getText().toString());
+                billBeingEdited.setName(billName);
+                billBeingEdited.setAmount(Float.parseFloat(billAmount));
+                billBeingEdited.setDueDate(billDueDate);
                 billBeingEdited.setRepeats(repeatsSelected);
                 dao.update(billBeingEditedId, billBeingEdited.toMap())
                     .addOnSuccessListener(suc -> {

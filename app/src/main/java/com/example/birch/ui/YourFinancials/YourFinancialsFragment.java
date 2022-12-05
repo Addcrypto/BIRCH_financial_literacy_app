@@ -1,6 +1,7 @@
 package com.example.birch.ui.YourFinancials;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -15,13 +16,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.birch.R;
-import com.example.birch.RegisterActivity;
+import com.example.birch.SP_LocalStorage;
+import com.example.birch.dto.AccessTokModel;
+import com.example.birch.dto.TokenModel;
 import com.example.birch.models.BankInfoModel;
+import com.example.birch.network.LinkApi;
 import com.example.birch.network.LinkTokenRequester;
 import com.example.birch.ui.Home.BankInfo_RecyclerViewAdapter;
 
 import com.plaid.link.OpenPlaidLink;
-import com.plaid.link.Plaid;
 import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkAccount;
 import com.plaid.link.result.LinkAccountBalance;
@@ -30,11 +33,17 @@ import com.plaid.link.result.LinkErrorCode;
 import com.plaid.link.result.LinkExit;
 import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.result.LinkSuccessMetadata;
-import com.example.birch.network.LinkTokenRequester;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,15 +55,39 @@ public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
     Button btn_linkAccount;
     Button btn_linkDebt;
+    String publicToken;
+    String accessToken;
+
+    SP_LocalStorage storage;
+    SharedPreferences.Editor editor;
+
+    private LinkApi linkApi;
+
 
     //Retrieval of data
     private ActivityResultLauncher<LinkTokenConfiguration> linkAccountToPlaid = registerForActivityResult(
             new OpenPlaidLink(),
             result -> {
                 if (result instanceof LinkSuccess) {
+                    //Context ctx = getActivity().getApplicationContext();
+                    linkApi = LinkTokenRequester.getInstance().getLinkAPI();
                     LinkSuccess success = (LinkSuccess) result;
 
-                    String publicToken = success.getPublicToken();
+                    publicToken = success.getPublicToken();
+                    System.out.println(publicToken);
+                    linkApi.getAccToken(publicToken).enqueue(new Callback<AccessTokModel>() {
+                        @Override
+                        public void onResponse(Call<AccessTokModel> call, Response<AccessTokModel> response) {
+                            accessToken = response.body().getAccess_token();
+                            System.out.println(accessToken);
+                        }
+
+                        @Override
+                        public void onFailure(Call<AccessTokModel> call, Throwable error) {
+                            onLinkTokenError(error);
+                        }
+                    });
+                    //System.out.println();
                     LinkSuccessMetadata metadata = success.getMetadata();
                     for(LinkAccount account : success.component2().getAccounts()){
                         String accountId = account.getId();
@@ -63,6 +96,7 @@ public class YourFinancialsFragment extends Fragment {
                         LinkAccountBalance accountBalance = account.getBalance();
                     }
                     String bankName = metadata.getInstitution().getName();
+                    //System.out.println(bankName);
                 }
                 else {
                     LinkExit exit = (LinkExit) result;
@@ -110,8 +144,20 @@ public class YourFinancialsFragment extends Fragment {
      * <a href="https://plaid.com/docs/link/android/#parameter-reference">parameter reference</>
      */
     private void openLink() {
-        LinkTokenRequester.INSTANCE.getToken()
-                .subscribe(this::onLinkTokenSuccess, this::onLinkTokenError);
+        linkApi = LinkTokenRequester.getInstance().getLinkAPI();
+        //System.out.println(linkApi.getLinkToken());
+        linkApi.getLinkToken().enqueue(new Callback<TokenModel>() {
+            @Override
+            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+                String token = response.body().getLink_token().toString();
+                onLinkTokenSuccess(token);
+            }
+
+            @Override
+            public void onFailure(Call<TokenModel> call, Throwable error) {
+                onLinkTokenError(error);
+            }
+        });
     }
 
     private void onLinkTokenSuccess(String token) {

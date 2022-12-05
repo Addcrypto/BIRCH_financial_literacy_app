@@ -3,7 +3,6 @@ package com.example.birch;
 /**
  * <User Account Information Model Class>
  * Last Updated: 09/26/2022 by Hyeonjun An (Daniel An)
- * Currently : Testing Purpose.
  */
 public class UserAccount {
     private String idToken; // Firebase UID (Unique Token Info)

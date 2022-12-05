@@ -24,7 +24,9 @@
         <!-- Intro Screen ! -->
         <activity
             android:name=".IntroScreen"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
 
         <!-- Register and Login ! -->
         <activity
@@ -32,7 +34,9 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
+            android:exported="true">
+
+        </activity>
 
         <!-- Main Activity ! -->
         <activity

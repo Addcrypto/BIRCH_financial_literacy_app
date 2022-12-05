@@ -14,9 +14,10 @@
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.209" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_initial_link.xml" value="0.18819655521783182" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_intro_screen.xml" value="0.5" />
-        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_login.xml" value="0.5" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/activity_regiester.xml" value="0.33" />
+        <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/fragment_create_upcoming_transaction.xml" value="0.19972826086956522" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/fragment_recommendations.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/skypa/AndroidStudioProjects/BIRCH_financial_literacy_app/app/src/main/res/layout/fragment_settings.xml" value="0.1793478260869565" />

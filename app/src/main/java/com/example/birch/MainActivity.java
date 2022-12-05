@@ -12,6 +12,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
+    SP_LocalStorage storage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

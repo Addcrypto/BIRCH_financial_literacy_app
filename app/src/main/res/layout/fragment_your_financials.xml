@@ -48,8 +48,7 @@
             android:id="@+id/rv_home_YourFinancials"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#F3F3F3"
-            android:padding="24dp"
+            android:background="@color/white_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -107,8 +106,7 @@
             android:id="@+id/rv_yourFinancials_Debt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#F3F3F3"
-            android:padding="24dp"
+            android:background="@color/white_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">

@@ -37,74 +37,94 @@
         <!-- Password Reset & Register !-->
         <EditText
             android:id="@+id/et_inputEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:ems="12"
             android:hint="Enter your email."
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_logo"
+            app:layout_constraintTop_toBottomOf="@+id/textView27"
             tools:ignore="MissingConstraints" />
 
         <EditText
             android:id="@+id/et_inputPassword"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:ems="12"
             android:hint="Enter your password."
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_inputEmail"
+            app:layout_constraintTop_toBottomOf="@+id/textView28"
             tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/bt_login"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
             android:text="Login"
             android:textColor="@color/dark_gray"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_inputPassword" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/bt_register"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/bt_login"
-            tools:layout_editor_absoluteX="0dp">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="register"
+            android:textColor="@color/dark_gray"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_login" />
 
-            <Button
-                android:id="@+id/bt_reset"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:text="Forgot\nyour password?"
-                android:textColor="@color/blue_gray"
-                android:textStyle="bold" />
+        <Button
+            android:id="@+id/bt_reset"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="Forgot\nyour password?"
+            android:textColor="@color/blue_gray"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="339dp" />
 
-            <Button
-                android:id="@+id/bt_register"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:text="register"
-                android:textColor="@color/blue_gray"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Email"
+            app:layout_constraintStart_toStartOf="@+id/et_inputEmail"
+            app:layout_constraintTop_toBottomOf="@+id/img_logo" />
+
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Password"
+            app:layout_constraintStart_toStartOf="@+id/et_inputPassword"
+            app:layout_constraintTop_toBottomOf="@+id/et_inputEmail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

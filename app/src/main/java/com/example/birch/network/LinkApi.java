@@ -18,7 +18,7 @@ public interface LinkApi {
     @POST("/api/set_access_token")
     Call<AccessTokModel> getAccToken(@Field("public_token") String publicToken);
 
-    @FormUrlEncoded
-    @POST("/api/auth")
-    Call
+//    @FormUrlEncoded
+//    @POST("/api/auth")
+//    Call<AccountInfoModel> getAuth(@Field("public_token") String publicToken);
 }

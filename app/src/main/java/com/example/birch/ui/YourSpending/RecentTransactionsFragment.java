@@ -40,7 +40,7 @@ public class RecentTransactionsFragment extends Fragment {
 
 
         for(int i = 0; i < titles.length; i++) {
-            transactionModels.add(new TransactionModel(totals[i], titles[i], "11/11/22"));
+            transactionModels.add(new TransactionModel(totals[i], titles[i], "Tuesday, December 6, 2022"));
         }
 
     }

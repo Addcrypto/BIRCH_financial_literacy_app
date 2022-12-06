@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".ui.YourFinancials.YourFinancialsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -20,14 +21,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_notLinkedMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Link to Plaid to View your Data"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/yourFinancials_layout"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:radius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/yourFinancials_debt_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,21 +50,21 @@
             android:id="@+id/tv_yourFinancials_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Accounts:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toTopOf="@+id/rv_home_YourFinancials"
+            android:layout_marginTop="8dp"
+            android:text="Money:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_home_YourFinancials"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/white_gray"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView30">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -61,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="$5,359.09"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="#000000"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tv_yourFinancials_title"
@@ -73,9 +86,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Request"
-            app:layout_constraintBottom_toTopOf="@+id/rv_home_YourFinancials"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Debt:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_yourFinancials_title" />
+
+        <TextView
+            android:id="@+id/tv_yourFinancials_debt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="$10,000"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView30"
+            app:layout_constraintStart_toEndOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView30" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,21 +118,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:radius="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yourFinancials_layout">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/tv_yourFinancials_debt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:text="Debt:"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toTopOf="@+id/rv_yourFinancials_Debt"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,7 +142,8 @@
             android:background="@color/white_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_yourFinancials_debt_title">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -141,15 +175,11 @@
         android:id="@+id/bt_initLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="23dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/yourFinancials_layout"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="Link"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

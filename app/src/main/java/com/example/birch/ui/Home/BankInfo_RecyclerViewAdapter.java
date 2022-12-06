@@ -1,6 +1,7 @@
 package com.example.birch.ui.Home;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birch.R;
+import com.example.birch.balance.Accounts;
 import com.example.birch.models.BankInfoModel;
+import com.plaid.link.result.LinkAccount;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BankInfo_RecyclerViewAdapter extends RecyclerView.Adapter<BankInfo_RecyclerViewAdapter.BankInfoViewHolder> {
     Context context;
-    ArrayList<BankInfoModel> bankInfoModels;
+    // ArrayList<BankInfoModel> bankInfoModels;
+    Accounts[] bankInfoModels = {};
 
     // get values for the context and model
-    public BankInfo_RecyclerViewAdapter (Context context, ArrayList<BankInfoModel> bankInfoModels) {
+    // public BankInfo_RecyclerViewAdapter (Context context, Accounts[] bankInfoModels) {
+    public BankInfo_RecyclerViewAdapter (Context context) {
         this.context = context;
-        this.bankInfoModels = bankInfoModels;
+    }
+
+    public void setAccounts (Accounts[] accounts) {
+    // public void setAccounts (ArrayList<BankInfoModel> accounts) {
+        this.bankInfoModels = accounts;
+    }
+
+    public Accounts[] getAccounts () {
+    // public ArrayList<BankInfoModel> getAccounts () {
+        return this.bankInfoModels;
     }
 
     @NonNull
@@ -39,13 +55,21 @@ public class BankInfo_RecyclerViewAdapter extends RecyclerView.Adapter<BankInfo_
         // assigning values to the views created in the "home_your_financials_row" layout file
         // based on the position of the recycler view
 
-        holder.tv_bankName.setText(bankInfoModels.get(position).getBankName());
-        holder.tv_accountTotal.setText(bankInfoModels.get(position).getAccountTotal());
+        Double currentBalance = Double.parseDouble(bankInfoModels[position].getBalances().getCurrent());
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String fmt = formatter.format(currentBalance);
+
+        holder.tv_bankName.setText(bankInfoModels[position].getName());
+        holder.tv_accountTotal.setText(fmt);
+
+        // holder.tv_bankName.setText(bankInfoModels.get(position).getBankName());
+        // holder.tv_accountTotal.setText(bankInfoModels.get(position).getAccountTotal());
     }
 
     @Override
     public int getItemCount() {
-        return bankInfoModels.size();
+        // return bankInfoModels.size();
+        return bankInfoModels.length;
     }
 
 

@@ -76,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                             if(snapshot.hasChild(ipt_Email)) {
                                 // If user exists, fetch the password.
                                 final String fetchPassword = snapshot.child(ipt_Email).child("password").getValue(String.class);
+                                final Boolean isLinked = !snapshot.child(ipt_Email).child("accessToken").getValue(String.class).isEmpty();
+                                final String accessToken = snapshot.child(ipt_Email).child("accessToken").getValue(String.class);
 
                                 // Match password with database then login if it matches.
                                 if(fetchPassword.equals(ipt_Pwd)) {
@@ -84,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                                     SharedPreferences.Editor editor = sharedPref.edit();
                                     editor.putBoolean("isLoggedIn", true);
                                     editor.putString("userEmail", ipt_Email);
+                                    editor.putBoolean("isLinked", isLinked);
+                                    editor.putString("accessToken", accessToken);
                                     editor.apply();
 
                                     Toast.makeText(LoginActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();

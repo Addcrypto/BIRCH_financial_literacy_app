@@ -150,11 +150,11 @@ public class HomeFragment extends Fragment {
         setupPieChart();
         loadChartData();
 
-        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
-        rv_yourFinancials.setHasFixedSize(true);
-        BankInfo_RecyclerViewAdapter adapter = new BankInfo_RecyclerViewAdapter(ctx, bankInfoModels);
-        rv_yourFinancials.setAdapter(adapter);
-        rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
+//        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
+//        rv_yourFinancials.setHasFixedSize(true);
+//        BankInfo_RecyclerViewAdapter adapter = new BankInfo_RecyclerViewAdapter(ctx, bankInfoModels);
+//        rv_yourFinancials.setAdapter(adapter);
+//        rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
 
         return view;
     }

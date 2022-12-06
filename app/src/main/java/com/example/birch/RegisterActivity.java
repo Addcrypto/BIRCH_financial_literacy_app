@@ -126,7 +126,10 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                             // Registers the user and then moves to login page.
                             else {
+                                // mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
                                 mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
+                                // TODO: enable this
+                                // mDatabaseRef.child("users").child(ipt_Email).child("accessToken").setValue(null);
                                 Toast.makeText(RegisterActivity.this, "User registered successfully.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);

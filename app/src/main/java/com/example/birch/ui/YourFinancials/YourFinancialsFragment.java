@@ -1,69 +1,133 @@
 package com.example.birch.ui.YourFinancials;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.birch.Helpers;
+import com.example.birch.Liabilities.LiabilitiesModel;
 import com.example.birch.R;
-import com.example.birch.RegisterActivity;
+import com.example.birch.SP_LocalStorage;
+import com.example.birch.balance.Accounts;
+import com.example.birch.balance.BalanceModel;
+import com.example.birch.dto.AccessTokModel;
+import com.example.birch.dto.TokenModel;
 import com.example.birch.models.BankInfoModel;
+import com.example.birch.network.LinkApi;
+import com.example.birch.network.LinkTokenRequester;
 import com.example.birch.ui.Home.BankInfo_RecyclerViewAdapter;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.plaid.link.OpenPlaidLink;
 import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkAccount;
-import com.plaid.link.result.LinkAccountBalance;
 import com.plaid.link.result.LinkError;
 import com.plaid.link.result.LinkErrorCode;
 import com.plaid.link.result.LinkExit;
 import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.result.LinkSuccessMetadata;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link YourFinancialsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.NumberFormat;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
+    // List<LinkAccount> plaidAccounts;
+    View view;
+    Accounts plaidAccounts[] = {};
     Button btn_linkAccount;
     Button btn_linkDebt;
+    Button btn_initLink;
+    String publicToken;
+    String accessToken;
 
-    //Retrieval of Link Token
-    LinkTokenConfiguration linkTokenConfiguration = new LinkTokenConfiguration.Builder()
-            .token("LINK_TOKEN_FROM_SERVER")
-            .build();
+    String currentUserEmail;
+    Boolean isLinked;
+
+    String totalCash;
+    String totalInvestments;
+    String totalDebt;
+
+    SP_LocalStorage storage;
+    SharedPreferences.Editor editor;
+
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+    private FirebaseAuth mFirebaseAuth;         // Firebase Authentication
+    private DatabaseReference mDatabaseRef;     // Real time Firebase Connection
+
+    private LinkApi linkApi;
+
 
     //Retrieval of data
     private ActivityResultLauncher<LinkTokenConfiguration> linkAccountToPlaid = registerForActivityResult(
             new OpenPlaidLink(),
             result -> {
+                // editor = storage.getEditor();
                 if (result instanceof LinkSuccess) {
+                    //Context ctx = getActivity().getApplicationContext();
+                    linkApi = LinkTokenRequester.getInstance().getLinkAPI();
                     LinkSuccess success = (LinkSuccess) result;
 
-                    String publicToken = success.getPublicToken();
+                    publicToken = success.getPublicToken();
+                    System.out.println(publicToken);
+
                     LinkSuccessMetadata metadata = success.getMetadata();
+                    // plaidAccounts = success.component2().getAccounts();
+                    // Log.i("---plaid accounts", plaidAccounts.get(0).getName());
                     for(LinkAccount account : success.component2().getAccounts()){
-                        String accountId = account.getId();
                         String accountName = account.getName();
-                        String accountMask = account.getMask();
-                        LinkAccountBalance accountBalance = account.getBalance();
+                        String subtype = account.getSubtype().toString();
+                        subtype = subtype.substring(subtype.indexOf("$"), subtype.indexOf("@"));
+                        System.out.println(accountName+"\n"+subtype);
                     }
                     String bankName = metadata.getInstitution().getName();
+                    System.out.println(bankName);
+                    System.out.println(metadata.getMetadataJson());
+
+                    linkApi.getAccToken(publicToken).enqueue(new Callback<AccessTokModel>() {
+                        @Override
+                        public void onResponse(Call<AccessTokModel> call, Response<AccessTokModel> response) {
+                            accessToken = response.body().getAccess_token();
+                            System.out.println(accessToken);
+
+                            // Map access token to user
+                            mDatabaseRef.child("users").child(currentUserEmail).child("accessToken").setValue(accessToken);
+                            editor.putString("accessToken", accessToken);
+                            editor.putBoolean("isLinked", true);
+                            editor.apply();
+
+                            Navigation.findNavController(view).navigate(R.id.homeFragment);
+                        }
+
+                        @Override
+                        public void onFailure(Call<AccessTokModel> call, Throwable error) {
+                            onLinkTokenError(error);
+                        }
+                    });
                 }
                 else {
                     LinkExit exit = (LinkExit) result;
@@ -85,17 +149,21 @@ public class YourFinancialsFragment extends Fragment {
 
         // always set up models before passing to recycler view
         setUpBankInfoModels();
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://birch-finanancial-literacy-app-default-rtdb.firebaseio.com/");
     }
 
     public void setUpBankInfoModels() {
         // TODO: get this info from API
         String[] bankNames = {"Chase (Checking)", "Chase (Savings)", "Discover (Credit Card)"};
-        String[] accountType = {"Checking", "Savings", "Credit"};
+         String[] accountType = {"Checking", "Savings", "Credit"};
         String[] accountTotals = {"$3,343.88", "$1,182.89", "$832.32"};
 
         String[] debtNames = {"Discover (Credit Card)", "Car Loan"};
-        String[] debtType = {"Credit Card", "Loan"};
+         String[] debtType = {"Credit Card", "Loan"};
         String[] debtTotals = {"$168", "$5,000"};
+
 
         for(int i = 0; i < bankNames.length; i++) {
             bankInfoModels.add(new BankInfoModel(bankNames[i], accountTotals[i], accountType[i]));
@@ -106,39 +174,134 @@ public class YourFinancialsFragment extends Fragment {
         }
     }
 
+    /**
+     * For all Link configuration options, have a look at the
+     * <a href="https://plaid.com/docs/link/android/#parameter-reference">parameter reference</>
+     */
+    private void openLink() {
+        linkApi = LinkTokenRequester.getInstance().getLinkAPI();
+        //System.out.println(linkApi.getLinkToken());
+        linkApi.getLinkToken().enqueue(new Callback<TokenModel>() {
+            @Override
+            public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
+                String token = response.body().getLink_token();
+                onLinkTokenSuccess(token);
+            }
+
+            @Override
+            public void onFailure(Call<TokenModel> call, Throwable error) {
+                onLinkTokenError(error);
+            }
+        });
+    }
+
+    private void onLinkTokenSuccess(String token) {
+        LinkTokenConfiguration configuration = new LinkTokenConfiguration.Builder()
+                .token(token)
+                .build();
+        linkAccountToPlaid.launch(configuration);
+    }
+
+    private void onLinkTokenError(Throwable error) {
+        Context ctx = getActivity().getApplicationContext();
+        if (error instanceof java.net.ConnectException) {
+            Toast.makeText(ctx, "There was an error while linking to your bank. Try again later.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_your_financials, container, false);
+        view = inflater.inflate(R.layout.fragment_your_financials, container, false);
         Context ctx = getActivity().getApplicationContext();
+        storage = new SP_LocalStorage(ctx);
+        editor = storage.getEditor();
+
+        linkApi = LinkTokenRequester.getInstance().getLinkAPI();
+
+        Helpers h = new Helpers();
+
+        // Views
+        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
+        ConstraintLayout cl_yourFinancials = view.findViewById(R.id.cl_home_yourFinancials);
+
+        RecyclerView rv_yourFinancials_debt = view.findViewById(R.id.rv_yourFinancials_Debt);
+        ConstraintLayout cl_yourDebt = view.findViewById(R.id.yourFinancials_debt_layout);
+
+        TextView isLinkedText = view.findViewById(R.id.tv_notLinkedMessage);
+        TextView tv_total = view.findViewById(R.id.tv_yourFinancials_total);
+        TextView tv_debt = view.findViewById(R.id.tv_yourFinancials_debt);
+        TextView tv_investments = view.findViewById(R.id.tv_yourFinancials_investments);
+
+        TextView tv_loadingAccounts = view.findViewById(R.id.tv_loadingAccounts);
 
         btn_linkAccount = view.findViewById(R.id.btn_linkBank);
         btn_linkDebt = view.findViewById(R.id.btn_linkDebt);
+        btn_initLink = view.findViewById(R.id.bt_initLink);
 
-        btn_linkAccount.setOnClickListener(new View.OnClickListener() {
+        // Local Storage
+        currentUserEmail = storage.getCurrentUserEmail();
+        isLinked = storage.getIsLinked();
+
+        if(isLinked) {
+            btn_initLink.setVisibility(View.INVISIBLE);
+            isLinkedText.setVisibility(View.INVISIBLE);
+            cl_yourFinancials.setVisibility(View.VISIBLE);
+
+            // Show loading text
+            tv_loadingAccounts.setVisibility(View.VISIBLE);
+
+            // get access token from user
+            accessToken = storage.getAccessToken();
+
+            BankInfo_RecyclerViewAdapter financials_adapter = new BankInfo_RecyclerViewAdapter(ctx);
+            rv_yourFinancials.setAdapter(financials_adapter);
+            rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
+
+            // Get balance from api
+            linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
+                @Override
+                public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
+                    // System.out.println(response.body().getAccounts());
+                    plaidAccounts = response.body().getAccounts();
+
+                    // Hide loading text
+                    tv_loadingAccounts.setVisibility(View.INVISIBLE);
+
+                    String[] t = h.calculateTotals(plaidAccounts);
+                    tv_total.setText(t[0]);
+                    tv_investments.setText(t[1]);
+                    tv_debt.setText(t[2]);
+
+                    // Update recycler view
+                    financials_adapter.setAccounts(plaidAccounts);
+                    rv_yourFinancials.setAdapter(financials_adapter);
+                }
+
+                @Override
+                public void onFailure(Call<BalanceModel> call, Throwable error) {
+                    Log.i("GET BALANCE ERROR", error.toString());
+                    onLinkTokenError(error);
+                }
+            });
+        } else {
+            isLinkedText.setVisibility(View.VISIBLE);
+
+            cl_yourFinancials.setVisibility(View.INVISIBLE);
+            tv_loadingAccounts.setVisibility(View.INVISIBLE);
+        }
+
+
+        btn_initLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ctx, "link account clicked", Toast.LENGTH_SHORT).show();
+                openLink();
             }
         });
 
-        btn_linkDebt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(ctx, "link debt clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
-        BankInfo_RecyclerViewAdapter adapter = new BankInfo_RecyclerViewAdapter(ctx, bankInfoModels);
-        rv_yourFinancials.setAdapter(adapter);
-        rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
-
-        RecyclerView rv_yourFinancials_debt = view.findViewById(R.id.rv_yourFinancials_Debt);
-        BankInfo_RecyclerViewAdapter adapter_2 = new BankInfo_RecyclerViewAdapter(ctx, debtInfoModels);
-        rv_yourFinancials_debt.setAdapter(adapter_2);
-        rv_yourFinancials_debt.setLayoutManager(new LinearLayoutManager(ctx));
 
 
         // Inflate the layout for this fragment

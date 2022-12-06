@@ -4,16 +4,26 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.birch.Helpers;
 import com.example.birch.R;
+import com.example.birch.SP_LocalStorage;
+import com.example.birch.balance.Accounts;
+import com.example.birch.balance.BalanceModel;
 import com.example.birch.models.BankInfoModel;
+import com.example.birch.network.LinkApi;
+import com.example.birch.network.LinkTokenRequester;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -22,58 +32,34 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     PieChart pieChart;
     ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
+    private LinkApi linkApi;
+    Accounts plaidAccounts[] = {};
+
+    ConstraintLayout cl_youFinancials;
+
+    SP_LocalStorage storage;
+
+    Boolean isLinked;
+    String accessToken;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment homeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        // always set up models before passing to recycler view
-        setUpBankInfoModels();
     }
 
     private void setupPieChart() {
@@ -128,16 +114,15 @@ public class HomeFragment extends Fragment {
         // pieChart.animateY(1400, Easing.EaseInOutQuad);
     }
 
-    public void setUpBankInfoModels() {
-        // TODO: get this info from API
-        String[] bankNames = {"Chase (Checking)", "Chase (Savings)", "Discover (Credit Card)"};
-        String[] accountType = {"Checking", "Savings", "Credit"};
-        String[] accountTotals = {"$3,343.88", "$1,182.89", "$832.32"};
-
-        for(int i = 0; i < bankNames.length; i++) {
-            bankInfoModels.add(new BankInfoModel(bankNames[i], accountTotals[i], accountType[i]));
+    private void onLinkTokenError(Throwable error) {
+        Context ctx = getActivity().getApplicationContext();
+        if (error instanceof java.net.ConnectException) {
+            Toast.makeText(ctx, "There was an error while linking to your bank. Try again later.", Toast.LENGTH_LONG).show();
+            return;
         }
+        Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,16 +130,63 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Context ctx = getActivity().getApplicationContext();
+        storage = new SP_LocalStorage(ctx);
+        Helpers h = new Helpers();
+
+        isLinked = storage.getIsLinked();
+        linkApi = LinkTokenRequester.getInstance().getLinkAPI();
+
+        TextView notLinkedMessage = view.findViewById(R.id.tv_home_notLinkedMessage);
+        cl_youFinancials = view.findViewById(R.id.cl_home_yourFinancials);
+
 
         pieChart = (PieChart) view.findViewById(R.id.chart);
         setupPieChart();
         loadChartData();
 
-        RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
-        rv_yourFinancials.setHasFixedSize(true);
-        BankInfo_RecyclerViewAdapter adapter = new BankInfo_RecyclerViewAdapter(ctx, bankInfoModels);
-        rv_yourFinancials.setAdapter(adapter);
-        rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
+        if (isLinked) {
+            notLinkedMessage.setVisibility(View.INVISIBLE);
+
+            pieChart.setVisibility(View.VISIBLE);
+            cl_youFinancials.setVisibility(View.VISIBLE);
+
+            accessToken = storage.getAccessToken();
+
+            TextView tv_cash = view.findViewById(R.id.tv_home_cash);
+            TextView tv_inv = view.findViewById(R.id.tv_home_investments);
+            TextView tv_debt = view.findViewById(R.id.tv_home_debt);
+
+            // Get balance from api
+            linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
+                @Override
+                public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
+                    // System.out.println(response.body().getAccounts());
+                    plaidAccounts = response.body().getAccounts();
+
+                    String[] t = h.calculateTotals(plaidAccounts);
+                    String cash = t[0];
+                    String inv = t[1];
+                    String debt = t[2];
+
+                    tv_cash.setText(cash);
+                    tv_inv.setText(inv);
+                    tv_debt.setText(debt);
+                }
+
+                @Override
+                public void onFailure(Call<BalanceModel> call, Throwable error) {
+                    Log.i("GET BALANCE ERROR", error.toString());
+                    onLinkTokenError(error);
+                }
+            });
+
+        } else {
+            // tODO: show message
+            notLinkedMessage.setVisibility(View.VISIBLE);
+            pieChart.setVisibility(View.INVISIBLE);
+            cl_youFinancials.setVisibility(View.INVISIBLE);
+
+        }
 
         return view;
     }

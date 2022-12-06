@@ -25,7 +25,7 @@
         <item>Your Deal is Here</item>
         <item>0% APY Waiting For You</item>
     </string-array>
-    
+
     <string-array name="billRepeats">
         <item>One Time</item>
         <item>Weekly</item>

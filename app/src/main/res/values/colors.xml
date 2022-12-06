@@ -4,7 +4,8 @@
     <color name="black_variant">#FF262B32</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_ivory">#FFFFFFF3</color>
-    <color name="white_variant">#FFF0F0F0</color>
+<!--    <color name="white_variant">#FFF0F0F0</color>-->
+    <color name="white_variant">#FFB1B1B1</color>
     <color name="white_gray">#FFE2E2E2</color>
     <color name="gray">#FFE0E3DA</color>
     <color name="gray_variant">#FFE2E2E2</color>

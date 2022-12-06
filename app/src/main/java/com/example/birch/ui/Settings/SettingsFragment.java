@@ -3,6 +3,7 @@ package com.example.birch.ui.Settings;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.result.ActivityResultLauncher;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +21,10 @@ import android.widget.Button;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.birch.LoginActivity;
 import com.example.birch.MainActivity;
-import com.example.birch.PlaidTest;
 import com.example.birch.R;
+import com.example.birch.SP_LocalStorage;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,15 +87,18 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        Context ctx = getActivity().getApplicationContext();
+        SP_LocalStorage storage = new SP_LocalStorage(ctx);
+        SharedPreferences.Editor editor = storage.getEditor();
 
-        bt_plaids = view.findViewById(R.id.bt_plaid);
-        bt_plaids.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), PlaidTest.class);
-                startActivity(intent);
-            }
+        CardView cv_logout = view.findViewById(R.id.cv_settings_logout);
+
+        cv_logout.setOnClickListener(v -> {
+           Intent i = new Intent(ctx, LoginActivity.class);
+           startActivity(i);
+           storage.clearLocalStorage(editor);
         });
+
 
         return view;
     }

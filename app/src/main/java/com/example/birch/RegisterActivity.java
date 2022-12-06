@@ -22,14 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hbb20.CountryCodePicker;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;         // Firebase Authentication
     private DatabaseReference mDatabaseRef;     // Real time Firebase Connection
     private EditText mEtEmail, mEtPassword,mEtPasswordConf,mPhoneNum;     // Input for email and password
-    private CountryCodePicker mCCP;
     private Button mBtRegister;                 // Input from Register Button
     private CheckBox mCheckTerm, mCheckPriv;
 
@@ -63,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
         mCheckTerm = findViewById(R.id.check_terms);
         mCheckPriv = findViewById(R.id.check_privacy);
         mPhoneNum = findViewById(R.id.et_phone);
-        mCCP = findViewById(R.id.countryCode);
 
         mBtRegister.setOnClickListener(new View.OnClickListener() {
             @Override

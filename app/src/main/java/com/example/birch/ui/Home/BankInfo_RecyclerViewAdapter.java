@@ -39,10 +39,8 @@ public class BankInfo_RecyclerViewAdapter extends RecyclerView.Adapter<BankInfo_
         // assigning values to the views created in the "home_your_financials_row" layout file
         // based on the position of the recycler view
 
-        // TODO: add bank type (Checking, Savings, etc.) and image
         holder.tv_bankName.setText(bankInfoModels.get(position).getBankName());
         holder.tv_accountTotal.setText(bankInfoModels.get(position).getAccountTotal());
-        // holder.imageView.setImageResource(bankInfoModels.get(position).getImage());
     }
 
     @Override
@@ -61,7 +59,6 @@ public class BankInfo_RecyclerViewAdapter extends RecyclerView.Adapter<BankInfo_
         public BankInfoViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.iv_home_yourFinancialsBankImage);
             tv_bankName = itemView.findViewById(R.id.tv_home_yourFinancialsBankAccount);
             tv_accountTotal = itemView.findViewById(R.id.tv_home_yourFinancialsBankTotal);
         }

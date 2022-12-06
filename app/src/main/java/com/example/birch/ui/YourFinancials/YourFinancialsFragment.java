@@ -236,6 +236,8 @@ public class YourFinancialsFragment extends Fragment {
         TextView tv_debt = view.findViewById(R.id.tv_yourFinancials_debt);
         TextView tv_investments = view.findViewById(R.id.tv_yourFinancials_investments);
 
+        TextView tv_loadingAccounts = view.findViewById(R.id.tv_loadingAccounts);
+
         btn_linkAccount = view.findViewById(R.id.btn_linkBank);
         btn_linkDebt = view.findViewById(R.id.btn_linkDebt);
         btn_initLink = view.findViewById(R.id.bt_initLink);
@@ -248,6 +250,9 @@ public class YourFinancialsFragment extends Fragment {
             btn_initLink.setVisibility(View.INVISIBLE);
             isLinkedText.setVisibility(View.INVISIBLE);
             cl_yourFinancials.setVisibility(View.VISIBLE);
+
+            // Show loading text
+            tv_loadingAccounts.setVisibility(View.VISIBLE);
 
             // get access token from user
             accessToken = storage.getAccessToken();
@@ -262,6 +267,9 @@ public class YourFinancialsFragment extends Fragment {
                 public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
                     // System.out.println(response.body().getAccounts());
                     plaidAccounts = response.body().getAccounts();
+
+                    // Hide loading text
+                    tv_loadingAccounts.setVisibility(View.INVISIBLE);
 
                     String[] t = h.calculateTotals(plaidAccounts);
                     tv_total.setText(t[0]);
@@ -281,7 +289,9 @@ public class YourFinancialsFragment extends Fragment {
             });
         } else {
             isLinkedText.setVisibility(View.VISIBLE);
+
             cl_yourFinancials.setVisibility(View.INVISIBLE);
+            tv_loadingAccounts.setVisibility(View.INVISIBLE);
         }
 
 

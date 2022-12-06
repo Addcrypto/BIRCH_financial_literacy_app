@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.birch.Liabilities.LiabilitiesModel;
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
 import com.example.birch.balance.BalanceModel;
@@ -57,9 +58,9 @@ public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
     Button btn_linkAccount;
     Button btn_linkDebt;
+    Button btn_initLink;
     String publicToken;
     String accessToken;
-    String balance;
 
     SP_LocalStorage storage;
     SharedPreferences.Editor editor;
@@ -190,30 +191,45 @@ public class YourFinancialsFragment extends Fragment {
 
         btn_linkAccount = view.findViewById(R.id.btn_linkBank);
         btn_linkDebt = view.findViewById(R.id.btn_linkDebt);
+        btn_initLink = view.findViewById(R.id.bt_initLink);
 
         btn_linkAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(ctx, "link account clicked", Toast.LENGTH_SHORT).show();
-                openLink();
-//                linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
-//                    @Override
-//                    public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
-//                        System.out.println(response);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<BalanceModel> call, Throwable error) {
-//                        onLinkTokenError(error);
-//                    }
-//                });
+                linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
+                    @Override
+                    public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
+                        System.out.println(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<BalanceModel> call, Throwable error) {
+                        onLinkTokenError(error);
+                    }
+                });
             }
         });
 
         btn_linkDebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ctx, "link debt clicked", Toast.LENGTH_SHORT).show();
+                linkApi.getLiabilities().enqueue(new Callback<LiabilitiesModel>() {
+                    @Override
+                    public void onResponse(Call<LiabilitiesModel> call, Response<LiabilitiesModel> response) {
+                        System.out.println(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<LiabilitiesModel> call, Throwable error) {
+                        onLinkTokenError(error);
+                    }
+                });
+            }
+        });
+
+        btn_initLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 openLink();
             }
         });

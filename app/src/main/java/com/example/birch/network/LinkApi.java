@@ -29,8 +29,8 @@ public interface LinkApi {
     Call<BalanceModel> getBalance(@Query("access_token") String accessToken);
 
     @GET("api/transactions")
-    Call<TransactionsModel> getTransactions(@Query("access_token") String accessToken);
+    Call<TransactionsModel> getTransactions();
 
     @GET("/api/liabilities")
-    Call<LiabilitiesModel> getLiabilities(@Query("access_token") String accessToken);
+    Call<LiabilitiesModel> getLiabilities();
 }

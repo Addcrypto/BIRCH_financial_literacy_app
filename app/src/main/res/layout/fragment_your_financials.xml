@@ -72,7 +72,7 @@
             android:id="@+id/btn_linkBank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Link +"
+            android:text="Request"
             app:layout_constraintBottom_toTopOf="@+id/rv_home_YourFinancials"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -130,12 +130,26 @@
             android:id="@+id/btn_linkDebt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Link +"
+            android:text="Request"
             app:layout_constraintBottom_toTopOf="@+id/rv_yourFinancials_Debt"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/bt_initLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="49dp"
+        android:layout_marginBottom="23dp"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/yourFinancials_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

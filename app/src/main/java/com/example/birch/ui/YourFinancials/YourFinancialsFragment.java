@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.birch.Helpers;
 import com.example.birch.Liabilities.LiabilitiesModel;
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
@@ -45,6 +46,9 @@ import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.result.LinkSuccessMetadata;
 
 
+import org.w3c.dom.Text;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +74,14 @@ public class YourFinancialsFragment extends Fragment {
     String currentUserEmail;
     Boolean isLinked;
 
-    String totalMoney;
+    String totalCash;
+    String totalInvestments;
     String totalDebt;
 
     SP_LocalStorage storage;
     SharedPreferences.Editor editor;
+
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
 
     private FirebaseAuth mFirebaseAuth;         // Firebase Authentication
     private DatabaseReference mDatabaseRef;     // Real time Firebase Connection
@@ -205,10 +212,6 @@ public class YourFinancialsFragment extends Fragment {
         Toast.makeText(ctx, error.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-//    private void calculateTotals() {
-//        plaidAccounts
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -218,6 +221,8 @@ public class YourFinancialsFragment extends Fragment {
         storage = new SP_LocalStorage(ctx);
         linkApi = LinkTokenRequester.getInstance().getLinkAPI();
 
+        Helpers h = new Helpers();
+
         // Views
         RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
         ConstraintLayout cl_yourFinancials = view.findViewById(R.id.yourFinancials_layout);
@@ -226,6 +231,9 @@ public class YourFinancialsFragment extends Fragment {
         ConstraintLayout cl_yourDebt = view.findViewById(R.id.yourFinancials_debt_layout);
 
         TextView isLinkedText = view.findViewById(R.id.tv_notLinkedMessage);
+        TextView tv_total = view.findViewById(R.id.tv_yourFinancials_total);
+        TextView tv_debt = view.findViewById(R.id.tv_yourFinancials_debt);
+        TextView tv_investments = view.findViewById(R.id.tv_yourFinancials_investments);
 
         btn_linkAccount = view.findViewById(R.id.btn_linkBank);
         btn_linkDebt = view.findViewById(R.id.btn_linkDebt);
@@ -248,10 +256,6 @@ public class YourFinancialsFragment extends Fragment {
             rv_yourFinancials.setAdapter(financials_adapter);
             rv_yourFinancials.setLayoutManager(new LinearLayoutManager(ctx));
 
-            BankInfo_RecyclerViewAdapter debt_adapter = new BankInfo_RecyclerViewAdapter(ctx);
-            rv_yourFinancials_debt.setAdapter(debt_adapter);
-            rv_yourFinancials_debt.setLayoutManager(new LinearLayoutManager(ctx));
-
             // Get balance from api
             linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
                 @Override
@@ -259,14 +263,14 @@ public class YourFinancialsFragment extends Fragment {
                     // System.out.println(response.body().getAccounts());
                     plaidAccounts = response.body().getAccounts();
 
+                    String[] t = h.calculateTotals(plaidAccounts);
+                    tv_total.setText(t[0]);
+                    tv_investments.setText(t[1]);
+                    tv_debt.setText(t[2]);
+
                     // Update recycler view
                     financials_adapter.setAccounts(plaidAccounts);
                     rv_yourFinancials.setAdapter(financials_adapter);
-
-                    /*
-                    debt_adapter.setAccounts(plaidAccounts);
-                    rv_yourFinancials_debt.setAdapter(financials_adapter);
-                     */
                 }
 
                 @Override

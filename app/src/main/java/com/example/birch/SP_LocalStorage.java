@@ -20,8 +20,4 @@ public class SP_LocalStorage {
     public String getCurrentBillId() { return this.sp.getString("currentBillId", ""); }
     public Boolean getIsLinked() { return this.sp.getBoolean("isLinked", false); }
     public String getAccessToken() { return this.sp.getString("accessToken", ""); }
-
-    public String getUserCash() {return this.sp.getString("cash", "");}
-    public String getUserDebt() {return this.sp.getString("debt", "");}
-    public String getUserInvestments() {return this.sp.getString("investments", "");}
 }

@@ -9,7 +9,11 @@
         android:id="@+id/yourFinancialsFragment"
         android:name="com.example.birch.ui.YourFinancials.YourFinancialsFragment"
         android:label="fragment_your_financials"
-        tools:layout="@layout/fragment_your_financials" />
+        tools:layout="@layout/fragment_your_financials" >
+        <action
+            android:id="@+id/action_yourFinancialsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.birch.ui.Settings.SettingsFragment"

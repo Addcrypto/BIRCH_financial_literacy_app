@@ -73,8 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String ipt_Email = encodeEmail(mEtEmail.getText().toString());
                 String ipt_Pwd = mEtPassword.getText().toString();
                 String ipt_PwdConf = mEtPasswordConf.getText().toString();
-                String ipt_Phone = mPhoneNum.getText().toString();
-                String ipt_CompletePhoneNum = "+" + mCCP.getFullNumber() + ipt_Phone;
+                // String ipt_Phone = mPhoneNum.getText().toString();
+                // String ipt_CompletePhoneNum = "+" + mCCP.getFullNumber() + ipt_Phone;
 
                 // ALL CHECKS HERE
                 /**
@@ -128,8 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                             else {
                                 // mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
                                 mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
-                                // TODO: enable this
-                                // mDatabaseRef.child("users").child(ipt_Email).child("accessToken").setValue(null);
+                                mDatabaseRef.child("users").child(ipt_Email).child("accessToken").setValue("");
+
                                 Toast.makeText(RegisterActivity.this, "User registered successfully.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,8 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.plaid.link.OpenPlaidLink;
 import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkAccount;
-import com.plaid.link.result.LinkAccountBalance;
-import com.plaid.link.result.LinkAccountSubtype;
 import com.plaid.link.result.LinkError;
 import com.plaid.link.result.LinkErrorCode;
 import com.plaid.link.result.LinkExit;
@@ -46,16 +45,9 @@ import com.plaid.link.result.LinkSuccess;
 import com.plaid.link.result.LinkSuccessMetadata;
 
 
-import org.w3c.dom.Text;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,6 +56,7 @@ public class YourFinancialsFragment extends Fragment {
     ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
     ArrayList<BankInfoModel> debtInfoModels = new ArrayList<>();
     // List<LinkAccount> plaidAccounts;
+    View view;
     Accounts plaidAccounts[] = {};
     Button btn_linkAccount;
     Button btn_linkDebt;
@@ -93,6 +86,7 @@ public class YourFinancialsFragment extends Fragment {
     private ActivityResultLauncher<LinkTokenConfiguration> linkAccountToPlaid = registerForActivityResult(
             new OpenPlaidLink(),
             result -> {
+                // editor = storage.getEditor();
                 if (result instanceof LinkSuccess) {
                     //Context ctx = getActivity().getApplicationContext();
                     linkApi = LinkTokenRequester.getInstance().getLinkAPI();
@@ -122,6 +116,11 @@ public class YourFinancialsFragment extends Fragment {
 
                             // Map access token to user
                             mDatabaseRef.child("users").child(currentUserEmail).child("accessToken").setValue(accessToken);
+                            editor.putString("accessToken", accessToken);
+                            editor.putBoolean("isLinked", true);
+                            editor.apply();
+
+                            Navigation.findNavController(view).navigate(R.id.homeFragment);
                         }
 
                         @Override
@@ -216,16 +215,18 @@ public class YourFinancialsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_your_financials, container, false);
+        view = inflater.inflate(R.layout.fragment_your_financials, container, false);
         Context ctx = getActivity().getApplicationContext();
         storage = new SP_LocalStorage(ctx);
+        editor = storage.getEditor();
+
         linkApi = LinkTokenRequester.getInstance().getLinkAPI();
 
         Helpers h = new Helpers();
 
         // Views
         RecyclerView rv_yourFinancials = view.findViewById(R.id.rv_home_YourFinancials);
-        ConstraintLayout cl_yourFinancials = view.findViewById(R.id.yourFinancials_layout);
+        ConstraintLayout cl_yourFinancials = view.findViewById(R.id.cl_home_yourFinancials);
 
         RecyclerView rv_yourFinancials_debt = view.findViewById(R.id.rv_yourFinancials_Debt);
         ConstraintLayout cl_yourDebt = view.findViewById(R.id.yourFinancials_debt_layout);
@@ -242,7 +243,6 @@ public class YourFinancialsFragment extends Fragment {
         // Local Storage
         currentUserEmail = storage.getCurrentUserEmail();
         isLinked = storage.getIsLinked();
-
 
         if(isLinked) {
             btn_initLink.setVisibility(View.INVISIBLE);
@@ -281,43 +281,9 @@ public class YourFinancialsFragment extends Fragment {
             });
         } else {
             isLinkedText.setVisibility(View.VISIBLE);
+            cl_yourFinancials.setVisibility(View.INVISIBLE);
         }
 
-
-        // Event Listeners
-        btn_linkAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
-                    @Override
-                    public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
-                        System.out.println(response);
-                    }
-
-                    @Override
-                    public void onFailure(Call<BalanceModel> call, Throwable error) {
-                        onLinkTokenError(error);
-                    }
-                });
-            }
-        });
-
-        btn_linkDebt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                linkApi.getLiabilities().enqueue(new Callback<LiabilitiesModel>() {
-                    @Override
-                    public void onResponse(Call<LiabilitiesModel> call, Response<LiabilitiesModel> response) {
-                        System.out.println(response);
-                    }
-
-                    @Override
-                    public void onFailure(Call<LiabilitiesModel> call, Throwable error) {
-                        onLinkTokenError(error);
-                    }
-                });
-            }
-        });
 
         btn_initLink.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -42,6 +45,8 @@ public class HomeFragment extends Fragment {
     ArrayList<BankInfoModel> bankInfoModels = new ArrayList<>();
     private LinkApi linkApi;
     Accounts plaidAccounts[] = {};
+
+    ConstraintLayout cl_youFinancials;
 
     SP_LocalStorage storage;
 
@@ -131,7 +136,20 @@ public class HomeFragment extends Fragment {
         isLinked = storage.getIsLinked();
         linkApi = LinkTokenRequester.getInstance().getLinkAPI();
 
+        TextView notLinkedMessage = view.findViewById(R.id.tv_home_notLinkedMessage);
+        cl_youFinancials = view.findViewById(R.id.cl_home_yourFinancials);
+
+
+        pieChart = (PieChart) view.findViewById(R.id.chart);
+        setupPieChart();
+        loadChartData();
+
         if (isLinked) {
+            notLinkedMessage.setVisibility(View.INVISIBLE);
+
+            pieChart.setVisibility(View.VISIBLE);
+            cl_youFinancials.setVisibility(View.VISIBLE);
+
             accessToken = storage.getAccessToken();
 
             TextView tv_cash = view.findViewById(R.id.tv_home_cash);
@@ -162,11 +180,12 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-            pieChart = (PieChart) view.findViewById(R.id.chart);
-            setupPieChart();
-            loadChartData();
         } else {
             // tODO: show message
+            notLinkedMessage.setVisibility(View.VISIBLE);
+            pieChart.setVisibility(View.INVISIBLE);
+            cl_youFinancials.setVisibility(View.INVISIBLE);
+
         }
 
         return view;

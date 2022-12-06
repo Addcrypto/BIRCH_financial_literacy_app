@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/yourFinancials_layout"
+        android:id="@+id/cl_home_yourFinancials"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"

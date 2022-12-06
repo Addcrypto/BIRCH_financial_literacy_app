@@ -18,5 +18,4 @@ public class SP_LocalStorage {
     public String getCurrentUserEmail() { return this.sp.getString("userEmail", ""); }
     public Boolean getIsEditingBill() { return this.sp.getBoolean("isEditingBill", false); }
     public String getCurrentBillId() { return this.sp.getString("currentBillId", ""); }
-    public String getPublicToken() { return this.sp.getString("publicToken", ""); }
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.birch.R;
 import com.example.birch.SP_LocalStorage;
+import com.example.birch.balance.BalanceModel;
 import com.example.birch.dto.AccessTokModel;
 import com.example.birch.dto.TokenModel;
 import com.example.birch.models.BankInfoModel;
@@ -28,6 +29,7 @@ import com.plaid.link.OpenPlaidLink;
 import com.plaid.link.configuration.LinkTokenConfiguration;
 import com.plaid.link.result.LinkAccount;
 import com.plaid.link.result.LinkAccountBalance;
+import com.plaid.link.result.LinkAccountSubtype;
 import com.plaid.link.result.LinkError;
 import com.plaid.link.result.LinkErrorCode;
 import com.plaid.link.result.LinkExit;
@@ -57,6 +59,7 @@ public class YourFinancialsFragment extends Fragment {
     Button btn_linkDebt;
     String publicToken;
     String accessToken;
+    String balance;
 
     SP_LocalStorage storage;
     SharedPreferences.Editor editor;
@@ -75,6 +78,18 @@ public class YourFinancialsFragment extends Fragment {
 
                     publicToken = success.getPublicToken();
                     System.out.println(publicToken);
+
+                    LinkSuccessMetadata metadata = success.getMetadata();
+                    for(LinkAccount account : success.component2().getAccounts()){
+                        String accountName = account.getName();
+                        String subtype = account.getSubtype().toString();
+                        subtype = subtype.substring(subtype.indexOf("$"), subtype.indexOf("@"));
+                        System.out.println(accountName+"\n"+subtype);
+                    }
+                    String bankName = metadata.getInstitution().getName();
+                    System.out.println(bankName);
+                    System.out.println(metadata.getMetadataJson());
+
                     linkApi.getAccToken(publicToken).enqueue(new Callback<AccessTokModel>() {
                         @Override
                         public void onResponse(Call<AccessTokModel> call, Response<AccessTokModel> response) {
@@ -87,16 +102,6 @@ public class YourFinancialsFragment extends Fragment {
                             onLinkTokenError(error);
                         }
                     });
-                    //System.out.println();
-                    LinkSuccessMetadata metadata = success.getMetadata();
-                    for(LinkAccount account : success.component2().getAccounts()){
-                        String accountId = account.getId();
-                        String accountName = account.getName();
-                        String accountMask = account.getMask();
-                        LinkAccountBalance accountBalance = account.getBalance();
-                    }
-                    String bankName = metadata.getInstitution().getName();
-                    //System.out.println(bankName);
                 }
                 else {
                     LinkExit exit = (LinkExit) result;
@@ -149,7 +154,7 @@ public class YourFinancialsFragment extends Fragment {
         linkApi.getLinkToken().enqueue(new Callback<TokenModel>() {
             @Override
             public void onResponse(Call<TokenModel> call, Response<TokenModel> response) {
-                String token = response.body().getLink_token().toString();
+                String token = response.body().getLink_token();
                 onLinkTokenSuccess(token);
             }
 
@@ -191,6 +196,17 @@ public class YourFinancialsFragment extends Fragment {
             public void onClick(View view) {
                 //Toast.makeText(ctx, "link account clicked", Toast.LENGTH_SHORT).show();
                 openLink();
+//                linkApi.getBalance(accessToken).enqueue(new Callback<BalanceModel>() {
+//                    @Override
+//                    public void onResponse(Call<BalanceModel> call, Response<BalanceModel> response) {
+//                        System.out.println(response);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<BalanceModel> call, Throwable error) {
+//                        onLinkTokenError(error);
+//                    }
+//                });
             }
         });
 

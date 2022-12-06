@@ -114,42 +114,28 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // If all checks are passed besides email check, database is accessed here
                 else {
-                    // Firebase Auth Process
-                    mFirebaseAuth.createUserWithEmailAndPassword(ipt_Email, ipt_Pwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    // References the Realtime DB. addListenerSingleValueEvent is used to check if child (email) already exists and if it doesn't then it registers the user.
+                    mDatabaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()){
-                                FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
-                                UserAccount account = new UserAccount();
-                                account.setIdToken(firebaseUser.getUid());
-                                account.setEmailID(firebaseUser.getEmail());
-                                account.setPassword(ipt_Pwd);
-
-                                // References the Realtime DB. addListenerSingleValueEvent is used to check if child (email) already exists and if it doesn't then it registers the user.
-                                mDatabaseRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        // Check if user is registered.
-                                        if(snapshot.hasChild(ipt_Email)) {
-                                            Toast.makeText(RegisterActivity.this, "User already exists! Redirecting to login page.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                            startActivity(intent);
-                                        }
-                                        // Registers the user and then moves to login page.
-                                        else {
-                                            mDatabaseRef.child("users").child(firebaseUser.getUid()).setValue(account);
-                                            Toast.makeText(RegisterActivity.this, "User registered successfully.", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            // Check if user is registered.
+                            if(snapshot.hasChild(ipt_Email)) {
+                                Toast.makeText(RegisterActivity.this, "User already exists! Redirecting to login page.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
                             }
+                            // Registers the user and then moves to login page.
+                            else {
+                                mDatabaseRef.child("users").child(ipt_Email).child("password").setValue(ipt_Pwd);
+                                Toast.makeText(RegisterActivity.this, "User registered successfully.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
 
